@@ -2,15 +2,19 @@
 
 @section('content')
     <div class="container mx-auto px-4 py-8">
-        @if (session('success'))
-            <div class="bg-green-100 text-green-800 p-4 rounded mb-4">
-                {{ session('success') }}
-            </div>
-        @endif
+        <!-- Alert -->
+        <div class="flex justify-center mt-4">
+            @if (session('success'))
+                <div class="bg-green-100 text-green-800 p-4 rounded mb-4 mx-auto">
+                    {{ session('success') }}
+                </div>
+            @endif
+        </div>
+        <!-- End of Alert -->
 
         <div class="flex justify-center">
             <div class="bg-white p-4 rounded-lg shadow-md">
-                <h1 class="text-2xl font-bold mb-4 text-black">CLIENTES</h1>
+                <h1 class="text-2xl font-bold mb-4 text-center text-black">CLIENTES</h1>
                 <div class="overflow-x-auto">
                     <table class="min-w-full bg-black text-white">
                         <thead>
@@ -47,4 +51,3 @@
         </div>
     </div>
 @endsection
-

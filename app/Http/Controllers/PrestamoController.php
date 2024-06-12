@@ -3,14 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Prestamo;
-use App\Models\Cliente;
+use App\Models\Prestamo; // Import the Prestamo model
+use App\Models\Cliente;  // Import the Cliente model
 
 class PrestamoController extends Controller
 {
     public function index()
     {
-        $prestamos = Prestamo::with('cliente')->get();
+        $prestamos = Prestamo::all();
         return view('prestamos.index', compact('prestamos'));
     }
 
@@ -23,21 +23,29 @@ class PrestamoController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'id_cliente' => 'required',
-            'monto' => 'required|numeric|min:0',
-            'fecha_inicio' => 'required|date',
-            'fecha_fin' => 'required|date|after:fecha_inicio',
+            'nombre_cliente' => 'required|exists:clientes,nombre',
+            'cantidad_prestamo' => 'required|numeric|min:0',
+            'fecha' => 'required|date',
         ]);
 
-        $prestamo = Prestamo::create($request->all());
 
-        // Calcular sanción (5% del monto)
-        $prestamo->sancion = $prestamo->monto * 0.05;
-        $prestamo->save();
+        Prestamo::create([
+            'nombre_cliente' => $request->nombre_cliente,
+            'cantidad_prestamo' => $request->cantidad_prestamo,
+            'fecha' => $request->fecha,
+        ]);
 
-        return redirect()->route('prestamos.index')
-            ->with('success', 'Préstamo creado exitosamente.');
+        return redirect()->route('prestamos.index')->with('success', 'Préstamo creado exitosamente.');
+    }
+    public function edit(Prestamo $prestamo)
+    {
+        // Lógica para mostrar el formulario de edición
     }
 
-    // Métodos para show, edit, update, destroy...
+    public function destroy(Prestamo $prestamo)
+    {
+        $prestamo->delete();
+
+        return redirect()->route('prestamos.index')->with('success', 'Préstamo eliminado correctamente.');
+    }
 }
