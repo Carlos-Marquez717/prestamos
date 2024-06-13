@@ -7,7 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class Prestamo extends Model
 {
     protected $fillable = [
-        'nombre_cliente',
+       
+        'cliente_id',
         'cantidad_prestamo',
         'fecha',
     ];
@@ -18,4 +19,5 @@ class Prestamo extends Model
         return $this->belongsTo(Cliente::class);
     }
 }
+
 

@@ -30,4 +30,4 @@ require __DIR__.'/auth.php';
 
 Route::resource('/clientes', ClienteController::class);
 Route::resource('/prestamos', PrestamoController::class);
-
+Route::get('/clientes/{cliente}/prestamos', [ClienteController::class, 'showPrestamos'])->name('clientes.prestamos');

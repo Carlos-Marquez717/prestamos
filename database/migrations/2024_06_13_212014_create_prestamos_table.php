@@ -13,7 +13,13 @@ return new class extends Migration
     {
         Schema::create('prestamos', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('cliente_id');
+            $table->decimal('cantidad_prestamo', 10, 2);
+            $table->date('fecha');
             $table->timestamps();
+
+            // Define la relación con la tabla clientes
+            $table->foreign('cliente_id')->references('id')->on('clientes')->onDelete('cascade');
         });
     }
 

@@ -1,5 +1,6 @@
 <?php
 
+// app/Models/Cliente.php
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -15,4 +16,9 @@ class Cliente extends Model
         'telefono',
         'email', // Usa 'email' en lugar de 'correo'
     ];
+
+    public function prestamos()
+    {
+        return $this->hasMany(Prestamo::class);
+    }
 }

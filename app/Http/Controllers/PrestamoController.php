@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -28,15 +27,18 @@ class PrestamoController extends Controller
             'fecha' => 'required|date',
         ]);
 
+        // Buscar el cliente por nombre
+        $cliente = Cliente::where('nombre', $request->nombre_cliente)->firstOrFail();
 
         Prestamo::create([
-            'nombre_cliente' => $request->nombre_cliente,
-            'cantidad_prestamo' => $request->cantidad_prestamo,
+            'cliente_id' => $cliente->id, // Asignar el ID del cliente
+            'cantidad_prestamo' => $request->cantidad_prestamo, // Asegúrate de que los nombres de campo coincidan con tu tabla
             'fecha' => $request->fecha,
         ]);
 
         return redirect()->route('prestamos.index')->with('success', 'Préstamo creado exitosamente.');
     }
+
     public function edit(Prestamo $prestamo)
     {
         // Lógica para mostrar el formulario de edición

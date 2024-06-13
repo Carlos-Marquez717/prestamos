@@ -38,9 +38,13 @@ class ClienteController extends Controller
             ->with('success', 'Cliente creado exitosamente.');
     }
 
-    public function show(Cliente $cliente)
+    public function showPrestamos(Cliente $cliente)
     {
-        return view('clientes.show', compact('cliente'));
+        // Cargar los préstamos del cliente
+        $prestamos = $cliente->prestamos;
+
+        // Pasar los datos a la vista
+        return view('clientes.prestamos', compact('cliente', 'prestamos'));
     }
 
     public function edit(Cliente $cliente)

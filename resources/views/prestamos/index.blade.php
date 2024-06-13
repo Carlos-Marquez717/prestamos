@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="container mx-auto px-4">
-        <div class="bg-gray-800 text-white shadow-md rounded my-6">
+        <div class="bg-black text-white shadow-md rounded my-6">
             <div class="px-6 py-4">
                 <h1 class="text-2xl font-bold mb-4 text-center">Listado de Préstamos</h1>
 
@@ -15,18 +15,18 @@
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead>
                         <tr>
-                            <th class="px-6 py-3 bg-gray-800 text-white text-left text-xs leading-4 font-medium uppercase tracking-wider">ID</th>
-                            <th class="px-6 py-3 bg-gray-800 text-white text-left text-xs leading-4 font-medium uppercase tracking-wider">Cliente</th>
-                            <th class="px-6 py-3 bg-gray-800 text-white text-left text-xs leading-4 font-medium uppercase tracking-wider">Cantidad Préstamo</th>
-                            <th class="px-6 py-3 bg-gray-800 text-white text-left text-xs leading-4 font-medium uppercase tracking-wider">Fecha</th>
-                            <th class="px-6 py-3 bg-gray-800 text-white text-left text-xs leading-4 font-medium uppercase tracking-wider">Acciones</th>
+                            <th class="px-6 py-3 bg-black text-white text-left text-xs leading-4 font-medium uppercase tracking-wider">ID</th>
+                            <th class="px-6 py-3 bg-black text-white text-left text-xs leading-4 font-medium uppercase tracking-wider">Cliente</th>
+                            <th class="px-6 py-3 bg-black text-white text-left text-xs leading-4 font-medium uppercase tracking-wider">Cantidad Préstamo</th>
+                            <th class="px-6 py-3 bg-black text-white text-left text-xs leading-4 font-medium uppercase tracking-wider">Fecha</th>
+                            <th class="px-6 py-3 bg-black text-white text-left text-xs leading-4 font-medium uppercase tracking-wider">Acciones</th>
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
                         @foreach ($prestamos as $prestamo)
                             <tr>
                                 <td class="px-6 py-4 whitespace-no-wrap text-black">{{ $prestamo->id }}</td>
-                                <td class="px-6 py-4 whitespace-no-wrap text-black">{{ $prestamo->nombre_cliente }}</td>
+                                <td class="px-6 py-4 whitespace-no-wrap text-black">{{ $prestamo->cliente->nombre }}</td>
                                 <td class="px-6 py-4 whitespace-no-wrap text-black">{{ $prestamo->cantidad_prestamo }}</td>
                                 <td class="px-6 py-4 whitespace-no-wrap text-black">{{ $prestamo->fecha }}</td>
                                 <td class="px-6 py-4 whitespace-no-wrap">
