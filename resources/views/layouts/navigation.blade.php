@@ -27,6 +27,7 @@
                     <x-nav-link :href="route('prestamos.create')" :active="request()->routeIs('prestamos.create')">
                         {{ __('Agregar Prestamo') }}
                     </x-nav-link>
+
                 </div>
             </div>
 

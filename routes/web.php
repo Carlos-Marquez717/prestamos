@@ -4,6 +4,8 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\PrestamoController;
+use App\Http\Controllers\AbonoController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -29,5 +31,18 @@ Route::middleware('auth')->group(function () {
 require __DIR__.'/auth.php';
 
 Route::resource('/clientes', ClienteController::class);
-Route::resource('/prestamos', PrestamoController::class);
+Route::get('/prestamos/create', [PrestamoController::class, 'create'])->name('prestamos.create');
+
 Route::get('/clientes/{cliente}/prestamos', [ClienteController::class, 'showPrestamos'])->name('clientes.prestamos');
+Route::get('/prestamos/{prestamo}/abonos/create', [AbonoController::class, 'create'])->name('abonos.create');
+Route::post('/prestamos', [PrestamoController::class, 'store'])->name('prestamos.store');
+
+Route::post('/prestamos/{prestamo}/abonos', [AbonoController::class, 'store'])->name('abonos.store');
+Route::get('/prestamos/{prestamo}/pdf', [PrestamoController::class, 'generarBoleta'])->name('prestamos.pdf');
+Route::get('/prestamos/buscar', 'PrestamoController@buscar')->name('prestamos.buscar');
+Route::get('/prestamos', [PrestamoController::class, 'index'])->name('prestamos.index');
+Route::get('/prestamos/{prestamo}', [PrestamoController::class, 'show'])->name('prestamos.show');
+Route::get('/prestamos/{prestamo}/edit', 'PrestamoController@edit')->name('prestamos.edit');
+Route::delete('/prestamos/{prestamo}', [PrestamoController::class, 'destroy'])->name('prestamos.destroy');
+
+

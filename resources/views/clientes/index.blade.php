@@ -13,8 +13,14 @@
         <!-- End of Alert -->
 
         <div class="flex justify-center">
-            <div class="bg-black p-4 rounded-lg shadow-md">
+            <div class="bg-black p-4 rounded-lg shadow-md w-full">
                 <h1 class="text-2xl font-bold mb-4 text-center text-white">CLIENTES</h1>
+                
+                <!-- Buscador -->
+                <div class="mb-4 flex justify-end">
+                    <input type="text" id="search" placeholder="Buscar por nombre, dirección, teléfono, correo electrónico" class="px-4 py-2 rounded-md w-full max-w-md bg-gray-800 text-white focus:outline-none focus:bg-gray-900">
+                </div>
+                
                 <div class="overflow-x-auto">
                     <table class="min-w-full bg-black text-white">
                         <thead>
@@ -26,7 +32,7 @@
                                 <th class="py-2 px-4 border-b border-gray-600">Acciones</th>
                             </tr>
                         </thead>
-                        <tbody class="bg-gray-800 divide-y divide-gray-700">
+                        <tbody id="table-body" class="bg-gray-800 divide-y divide-gray-700">
                             @foreach ($clientes as $cliente)
                                 <tr>
                                     <td class="py-2 px-4 border-b border-gray-600">{{ $cliente->nombre }}</td>
@@ -47,7 +53,30 @@
                         </tbody>
                     </table>
                 </div>
+
+                <!-- Paginación -->
+                <div class="mt-4 flex justify-center">
+                    {{ $clientes->links() }}
+                </div>
             </div>
         </div>
     </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#search').on('keyup', function() {
+                var searchText = $(this).val().toLowerCase();
+                $('#table-body tr').each(function() {
+                    var found = false;
+                    $(this).each(function() {
+                        if ($(this).text().toLowerCase().indexOf(searchText) !== -1) {
+                            found = true;
+                        }
+                    });
+                    found ? $(this).show() : $(this).hide();
+                });
+            });
+        });
+    </script>
 @endsection

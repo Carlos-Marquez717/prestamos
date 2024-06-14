@@ -19,26 +19,34 @@
             <form action="{{ route('prestamos.store') }}" method="POST" class="space-y-4">
                 @csrf
                 <div>
-                    <label for="nombre_cliente" class="block text-sm font-medium text-white">Cliente</label>
-                    <select name="nombre_cliente" id="nombre_cliente"
+                    <label for="cliente_id" class="block text-sm font-medium text-white">Cliente</label>
+                    <select name="cliente_id" id="cliente_id"
                         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm bg-white text-black">
                         @foreach ($clientes as $cliente)
-                            <option value="{{ $cliente->nombre }}">{{ $cliente->nombre }}</option>
+                            <option value="{{ $cliente->id }}">{{ $cliente->nombre }}</option>
                         @endforeach
                     </select>
+                    @error('cliente_id')
+                        <span class="text-red-500">{{ $message }}</span>
+                    @enderror
                 </div>
 
                 <div>
-                    <label for="cantidad_prestamo" class="block text-sm font-medium text-white">Cantidad del
-                        Préstamo</label>
+                    <label for="cantidad_prestamo" class="block text-sm font-medium text-white">Cantidad del Préstamo</label>
                     <input type="number" name="cantidad_prestamo" id="cantidad_prestamo"
-                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm bg-white text-black">
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm bg-white text-black" value="{{ old('cantidad_prestamo') }}" required>
+                    @error('cantidad_prestamo')
+                        <span class="text-red-500">{{ $message }}</span>
+                    @enderror
                 </div>
 
                 <div>
                     <label for="fecha" class="block text-sm font-medium text-white">Fecha del Préstamo</label>
                     <input type="date" name="fecha" id="fecha"
-                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm bg-white text-black">
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm bg-white text-black" value="{{ old('fecha') }}" required>
+                    @error('fecha')
+                        <span class="text-red-500">{{ $message }}</span>
+                    @enderror
                 </div>
 
                 <div>

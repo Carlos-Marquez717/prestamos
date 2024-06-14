@@ -4,8 +4,8 @@
 
     <div class="bg-black text-white py-8 px-4 sm:px-6 lg:px-8">
         <a href="/">
-            <img src="{{ asset('images/Banco.svg') }}" alt="Logo de la empresa">
-            <H1 style="text-align: center">BIENVENIDO A PRESTAPP</H1>
+            <img src="{{ asset('images/Banco.png') }}" alt="Logo de la empresa">
+            <H1 style="text-align: center">BIENVENIDO </H1>
         </a>
 
       

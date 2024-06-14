@@ -12,6 +12,26 @@
                     </div>
                 @endif
 
+                <!-- Formulario de búsqueda -->
+                <form action="{{ route('prestamos.buscar') }}" method="GET" class="mb-4">
+                    <div class="flex items-center justify-between">
+                        <div class="flex-1 mr-2">
+                            <label for="cliente" class="block text-white">Cliente:</label>
+                            <input type="text" id="cliente" name="cliente" class="w-full bg-gray-800 text-white border border-gray-600 rounded py-2 px-4 focus:outline-none focus:bg-white focus:text-gray-900" placeholder="Nombre del cliente">
+                        </div>
+                        <div class="flex-1 mr-2">
+                            <label for="cantidad" class="block text-white">Cantidad:</label>
+                            <input type="text" id="cantidad" name="cantidad" class="w-full bg-gray-800 text-white border border-gray-600 rounded py-2 px-4 focus:outline-none focus:bg-white focus:text-gray-900" placeholder="Cantidad del préstamo">
+                        </div>
+                        <div class="flex-1">
+                            <label for="fecha" class="block text-white">Fecha:</label>
+                            <input type="date" id="fecha" name="fecha" class="w-full bg-gray-800 text-white border border-gray-600 rounded py-2 px-4 focus:outline-none focus:bg-white focus:text-gray-900">
+                        </div>
+                        <button type="submit" class="ml-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Buscar</button>
+                    </div>
+                </form>
+
+                <!-- Tabla de préstamos -->
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead>
                         <tr>
@@ -43,6 +63,11 @@
                         @endforeach
                     </tbody>
                 </table>
+                
+                <!-- Paginación -->
+                <div class="mt-4 flex justify-center">
+                    {{ $prestamos->appends(request()->input())->links() }}
+                </div>
             </div>
         </div>
     </div>
