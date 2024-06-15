@@ -22,7 +22,7 @@
                 </div>
                 
                 <div class="overflow-x-auto">
-                    <table class="min-w-full bg-black text-white">
+                    <table class="min-w-full bg-blue-900 text-white">
                         <thead>
                             <tr>
                                 <th class="py-2 px-4 border-b border-gray-600">Nombre</th>
@@ -47,6 +47,10 @@
                                             @method('DELETE')
                                             <button type="submit" class="ml-2 px-4 py-2 rounded-md bg-red-600 text-white hover:bg-red-700" onclick="return confirm('¿Estás seguro de que quieres eliminar este cliente?')">Eliminar</button>
                                         </form>
+                                        <!-- Botón para generar boleta por cliente -->
+                                        <a href="{{ route('clientes.boleta', $cliente) }}" class="ml-2 px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700">HISTORIAL</a>
+                                        <a href="{{ route('clientes.boleta.general') }}" class="ml-2 px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700">HISTORIAL GENERAL</a>
+
                                     </td>
                                 </tr>
                             @endforeach

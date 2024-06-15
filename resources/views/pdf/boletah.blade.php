@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-   
+    
     <style>
         /* Estilos generales */
         body {
@@ -55,7 +55,7 @@
 
         
         <table>
-            <h1 class="title">Boleta de Pago</h1>
+            
             
                 
                 
@@ -65,20 +65,22 @@
                 <td class="title-cell">{{ $abono->prestamo->cliente->nombre }}</td>
             </tr>
             <tr>
-                <th class="title-cell">Abono</th>
+                <th class="title-cell">cantidad prestamo</th>
+                <td class="title-cell">${{ $abono->prestamo->cantidad_prestamo  }}</td>
+            </tr>
+         
+            <tr>
+                <th class="title-cell">Abonos</th>
+                <td class="title-cell">{{ $abono->fecha }}</td>
+            </tr>
+            <tr>
+                <th class="title-cell">Abonos</th>
                 <td class="title-cell">${{ $abono->monto }}</td>
             </tr>
+
             <tr>
                 <th class="title-cell">Restante</th>
                 <td class="title-cell">${{ $abono->prestamo->cantidad_prestamo - $abono->prestamo->abonos()->sum('monto') }}</td>
-            </tr>
-            <tr>
-                <th class="title-cell">Monto Total</th>
-                <td class="title-cell">${{ $abono->prestamo->cantidad_prestamo  }}</td>
-            </tr>
-            <tr>
-                <th class="title-cell">Fecha de Abono</th>
-                <td class="title-cell">{{ $abono->fecha }}</td>
             </tr>
         </table>
     </div>

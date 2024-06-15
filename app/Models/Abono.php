@@ -16,6 +16,10 @@ class Abono extends Model
         'fecha',
     ];
 
+    protected $dates = [
+        'fecha',
+    ];
+    
     public function prestamo()
     {
         return $this->belongsTo(Prestamo::class);

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Cliente;
+use App\Services\PDF; // Importa la clase PDF desde el namespace correcto
+
 
 class ClienteController extends Controller
 {
@@ -36,29 +38,20 @@ class ClienteController extends Controller
             ->with('success', 'Cliente creado exitosamente.');
     }
 
-        public function showPrestamos(Cliente $cliente)
-    {   
-        // Filtros de búsqueda
-        $fecha = request('fecha');
-        $cantidad = request('cantidad');
-        $nombre = request('nombre');
-        $estado = request('estado');
-        $restante = request('restante');
+    public function showPrestamos(Request $request, Cliente $cliente)
+    {
+        $fecha = $request->input('fecha');
+        $cantidad = $request->input('cantidad');
+        $estado = $request->input('estado');
+        $restante = $request->input('restante');
         
-        // Consulta base de préstamos del cliente
         $query = $cliente->prestamos()->with('abonos');
         
-        // Aplicar filtros si están presentes
         if ($fecha) {
             $query->where('fecha', $fecha);
         }
         if ($cantidad) {
             $query->where('cantidad_prestamo', $cantidad);
-        }
-        if ($nombre) {
-            $query->whereHas('cliente', function ($query) use ($nombre) {
-                $query->where('nombre', 'like', '%' . $nombre . '%');
-            });
         }
         if ($estado) {
             if ($estado == 'pagado') {
@@ -71,12 +64,11 @@ class ClienteController extends Controller
             $query->havingRaw('cantidad_prestamo - sum(abonos.monto) = ?', [$restante]);
         }
         
-        // Obtener los préstamos paginados
         $prestamos = $query->paginate(5);
         
-        // Pasar los datos a la vista
         return view('clientes.prestamos', compact('cliente', 'prestamos'));
     }
+
 
 
 
@@ -107,4 +99,49 @@ class ClienteController extends Controller
         return redirect()->route('clientes.index')
             ->with('success', 'Cliente eliminado exitosamente.');
     }
+
+
+        public function generarBoleta(Cliente $cliente)
+    {
+        try {
+            // Crea una instancia de tu clase PDF personalizada
+            $pdf = new PDF();
+
+            // Lógica para generar la boleta específica del cliente
+            $html = '<h1>Boleta para Cliente: ' . $cliente->nombre . '</h1>';
+            // Añade más contenido según tu lógica específica para la boleta del cliente
+
+            // Agrega el contenido al PDF
+            $pdf->addContent($html);
+
+            // Descarga el PDF al navegador con un nombre de archivo específico
+            $pdf->download('boleta_' . $cliente->id . '.pdf');
+        } catch (\Exception $e) {
+            // Manejar cualquier excepción que pueda ocurrir
+            dd($e->getMessage()); // Por ejemplo, muestra el mensaje de error
+        }
+    }
+
+    public function generarBoletaGeneral()
+    {
+        try {
+            // Crea una instancia de tu clase PDF personalizada
+            $pdf = new PDF();
+
+            // Lógica para generar la boleta general
+            $html = '<h1>Boleta General</h1>';
+            // Puedes agregar más contenido aquí según tu lógica para la boleta general
+
+            // Agrega el contenido al PDF
+            $pdf->addContent($html);
+
+            // Descarga el PDF al navegador con un nombre de archivo específico
+            $pdf->download('boleta_general.pdf');
+        } catch (\Exception $e) {
+            // Manejar cualquier excepción que pueda ocurrir
+            dd($e->getMessage()); // Por ejemplo, muestra el mensaje de error
+        }
+    }
+
+
 }
