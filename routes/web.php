@@ -32,6 +32,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/clientes/{cliente}/boleta', [ClienteController::class, 'generarBoleta'])->name('clientes.boleta');
     Route::get('/clientes/boleta-general', [ClienteController::class, 'generarBoletaGeneral'])->name('clientes.boleta.general');
 
+    Route::get('/prestamos/buscar', [PrestamoController::class, 'buscar'])->name('prestamos.buscar');
+
 
 });
 

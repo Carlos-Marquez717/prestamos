@@ -7,19 +7,24 @@ use Illuminate\Http\Request;
 use App\Models\Prestamo;
 use App\Models\Cliente;
 use TCPDF;
+use Illuminate\Support\Facades\View;
+
 
 class PrestamoController extends Controller
 {
+
     public function index()
     {
-        $prestamos = Prestamo::paginate(5);
+        $prestamos = Prestamo::all();
+        
         $prestamos->transform(function ($prestamo) {
             $prestamo->formatted_fecha = Carbon::parse($prestamo->fecha)->format('d F Y');
             return $prestamo;
         });
+
         return view('prestamos.index', compact('prestamos'));
-        
     }
+
         public function show(Prestamo $prestamo)
     {
         return view('prestamos.show', compact('prestamo'));
@@ -136,12 +141,45 @@ class PrestamoController extends Controller
         return $response;
     }
     
-        
 
-    
 
-    
+    public function buscar(Request $request)
+    {
+        $request->validate([
+            'cliente' => 'nullable|string',
+            'cantidad' => 'nullable|string',
+            'fecha' => 'nullable|date',
+        ]);
+
+        $prestamos = Prestamo::when($request->filled('cliente'), function ($query) use ($request) {
+                        $query->where('cliente', 'like', '%' . $request->input('cliente') . '%');
+                    })
+                    ->when($request->filled('cantidad'), function ($query) use ($request) {
+                        $query->where('cantidad_prestamo', 'like', '%' . $request->input('cantidad') . '%');
+                    })
+                    ->when($request->filled('fecha'), function ($query) use ($request) {
+                        $query->whereDate('fecha', $request->input('fecha'));
+                    })
+                    ->paginate(10);
+
+        $view = View::make('partials.prestamos_table', compact('prestamos'))->render();
+
+        return response()->json(['html' => $view]);
+    }
+
     
 }
+
+    
+
+
+
+
+
+
+    
+
+
+
 
 
