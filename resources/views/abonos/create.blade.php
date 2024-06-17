@@ -1,5 +1,10 @@
 @extends('layouts.app')
 
+@section ('css')
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+@endsection
+
 @section('content')
     <br><br><br><br>
     <div class="max-w-md mx-auto px-4 py-8">
@@ -18,7 +23,8 @@
 
                 <div class="mb-3">
                     <label for="fecha" class="block text-white">Fecha</label>
-                    <input type="date" name="fecha" id="fecha" class="w-full px-3 py-2 rounded-md bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500" value="{{ old('fecha') }}" required>
+                    
+                    <input type="text" name="fecha" id="fecha" placeholder="dd-mm-yyyy"  class="w-full px-3 py-2 rounded-md bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500" value="{{ old('fecha') }}" required>
                     @error('fecha')
                         <span class="text-red-500">{{ $message }}</span>
                     @enderror
@@ -30,11 +36,23 @@
             </form>
         </div>
     </div>
+    @section('js')
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+        <script>
+            // Script para limpiar el formulario después de enviar
+            document.getElementById('abonoForm').addEventListener('submit', function() {
+                // No limpiamos los campos aquí para asegurar que se envíen al servidor
+            });
+        </script>
 
-    <script>
-        // Script para limpiar el formulario después de enviar
-        document.getElementById('abonoForm').addEventListener('submit', function() {
-            // No limpiamos los campos aquí para asegurar que se envíen al servidor
-        });
-    </script>
+        <script>   
+            $(document).ready(function() {
+                $('#fecha').datepicker({
+                    dateFormat: 'dd-mm-yy'
+                });
+            });
+        </script>
+
+    @endsection
 @endsection

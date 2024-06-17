@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\View;
@@ -9,7 +8,6 @@ use App\Models\Prestamo;
 use App\Models\Abono;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
-
 
 class AbonoController extends Controller
 {
@@ -23,11 +21,11 @@ class AbonoController extends Controller
         // Validación
         $request->validate([
             'monto' => 'required|numeric|min:0|max:' . ($prestamo->cantidad_prestamo - $prestamo->abonos()->sum('monto')),
-            'fecha' => 'required|date',
+            'fecha' => 'required|date_format:d-m-Y', // Validar en formato 'd-m-Y'
         ]);
 
-        // Formatear la fecha en formato 'Y-m-d'
-        $fechaFormateada = Carbon::parse($request->fecha)->format('Y-m-d');
+        // Formatear la fecha en formato 'Y-m-d' para guardarla en la base de datos
+        $fechaFormateada = Carbon::createFromFormat('d-m-Y', $request->fecha)->format('Y-m-d');
 
         // Almacenamiento del abono
         $abono = Abono::create([
@@ -43,6 +41,9 @@ class AbonoController extends Controller
         if (!$abono->prestamo || !$abono->prestamo->cliente) {
             abort(404, 'El préstamo o el cliente asociado no fueron encontrados.');
         }
+
+        // Formatear la fecha del abono para mostrar en la boleta
+        $abono->fecha = Carbon::parse($abono->fecha)->format('d-m-Y');
 
         // Generar el contenido HTML de la boleta
         $html = view('pdf.boleta', compact('abono'))->render();

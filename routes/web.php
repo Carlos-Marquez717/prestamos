@@ -20,6 +20,7 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('prestamos', PrestamoController::class)->except(['edit', 'destroy']);
     Route::get('prestamos/{prestamo}/pdf', [PrestamoController::class, 'generarBoleta'])->name('prestamos.pdf');
+    
     Route::get('prestamos/create', [PrestamoController::class, 'create'])->name('prestamos.create');
     Route::get('prestamos/{prestamo}/edit', [PrestamoController::class, 'edit'])->name('prestamos.edit');
     Route::delete('prestamos/{prestamo}', [PrestamoController::class, 'destroy'])->name('prestamos.destroy');
@@ -30,11 +31,13 @@ Route::middleware('auth')->group(function () {
     Route::post('prestamos/{prestamo}/abonos', [AbonoController::class, 'store'])->name('abonos.store');
     
     Route::get('/clientes/{cliente}/boleta', [ClienteController::class, 'generarBoleta'])->name('clientes.boleta');
+    Route::get('/clientes/{cliente}/boleta', [ClienteController::class, 'generarBoleta1'])->name('clientes.boleta');
     Route::get('/clientes/boleta-general', [ClienteController::class, 'generarBoletaGeneral'])->name('clientes.boleta.general');
+    
 
     Route::get('/prestamos/buscar', [PrestamoController::class, 'buscar'])->name('prestamos.buscar');
 
-
+    
 });
 
 require __DIR__.'/auth.php';
