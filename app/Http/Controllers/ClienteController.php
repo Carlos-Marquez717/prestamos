@@ -114,13 +114,20 @@ class ClienteController extends Controller
     public function destroy(Cliente $cliente)
     {
         $cliente->delete();
-    
+
         return redirect()->route('clientes.index')
             ->with('success', 'Cliente eliminado exitosamente.');
     }
 
 
-        public function generarBoleta(Cliente $cliente)
+
+    public function show(Cliente $cliente)
+    {
+        return view('clientes.show', compact('cliente'));
+    }
+
+
+    public function generarBoleta(Cliente $cliente)
     {
         try {
             // Crea una instancia de tu clase PDF personalizada
@@ -141,12 +148,7 @@ class ClienteController extends Controller
         }
     }
 
-    public function boletaGeneral()
-    {
-        $clientes = Cliente::all(); // Fetch all clients
 
-        return view('clientes.boleta_general', compact('clientes'));
-    }
     public function generarBoleta1(Cliente $cliente)
     {
         // Cargar el historial de préstamos del cliente con sus abonos
@@ -180,5 +182,47 @@ class ClienteController extends Controller
         return response()->download(public_path('pdf/' . $filename))->deleteFileAfterSend(true);
     }
 
+    public function generarBoletaGeneral()
+    {
+        // Fetch all clients with their loans and abonos
+        $clientes = Cliente::with(['prestamos.abonos'])->get();
 
+        // Generate the content for the PDF
+        $html = view('pdf.boleta_general', compact('clientes'))->render();
+
+        // Create a new TCPDF instance
+        $pdf = new TCPDF();
+
+        // Set document information
+        $pdf->SetCreator(PDF_CREATOR);
+        $pdf->SetAuthor('Your Company');
+        $pdf->SetTitle('Boleta General de Prestamos');
+        $pdf->SetSubject('Boleta General de Prestamos');
+        $pdf->SetKeywords('TCPDF, PDF, example, test, guide');
+
+        // Remove default header/footer
+        $pdf->setPrintHeader(false);
+        $pdf->setPrintFooter(false);
+
+        // Add a page
+        $pdf->AddPage();
+
+        // Add the logo
+        $logo = public_path('images/Banco.svg');
+        $pdf->ImageSVG($logo, $x = 15, $y = 10, $w = 30, $h = 30);
+
+        // Add some space below the logo
+        $pdf->SetY(45);
+
+        // Set content
+        $pdf->writeHTML($html, true, false, true, false, '');
+
+        // Output PDF document
+        $filename = 'historial_general_prestamos.pdf';
+        $pdf->Output($filename, 'D'); // 'I' for inline display in browser, 'D' for download, 'F' for save on server, 'S' for returning as string
+
+        // Optional: Save the PDF on the server and return it as a download
+        // $pdf->Output(public_path('pdf/' . $filename), 'F');
+        // return response()->download(public_path('pdf/' . $filename))->deleteFileAfterSend(true);
+    }
 }

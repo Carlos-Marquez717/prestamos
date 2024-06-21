@@ -28,7 +28,7 @@
                                 <th class="py-2 px-4 border-b border-gray-600">Nombre</th>
                                 <th class="py-2 px-4 border-b border-gray-600">Dirección</th>
                                 <th class="py-2 px-4 border-b border-gray-600">Teléfono</th>
-                                <th class="py-2 px-4 border-b border-gray-600">Correo Electrónico</th>
+                                <th class="py-2 px-4 border-b border-gray-600">Correo</th>
                                 <th class="py-2 px-4 border-b border-gray-600">Acciones</th>
                             </tr>
                         </thead>
@@ -40,7 +40,7 @@
                                     <td class="py-2 px-4 border-b border-gray-600">{{ $cliente->telefono }}</td>
                                     <td class="py-2 px-4 border-b border-gray-600">{{ $cliente->email }}</td>
                                     <td class="py-2 px-4 border-b border-gray-600">
-                                        <a href="{{ route('clientes.prestamos', $cliente) }}" class="px-4 py-2 rounded-md bg-indigo-600 text-white hover:bg-indigo-700">Ver Prestamos</a>
+                                        <a href="{{ route('clientes.prestamos', $cliente) }}" class="px-4 py-2 rounded-md bg-indigo-600 text-white hover:bg-indigo-700">Prestamos</a>
                                         <a href="{{ route('clientes.edit', $cliente) }}" class="ml-2 px-4 py-2 rounded-md bg-yellow-600 text-white hover:bg-yellow-700">Editar</a>
                                         <form action="{{ route('clientes.destroy', $cliente) }}" method="POST" class="inline">
                                             @csrf
@@ -49,7 +49,7 @@
                                         </form>
                                         <!-- Botón para generar boleta por cliente -->
                                         <a href="{{ route('clientes.boleta', $cliente) }}" class="ml-2 px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700">HISTORIAL</a>
-                                        <a href="{{ route('clientes.boleta.general') }}" class="ml-2 px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700">HISTORIAL GENERAL</a>
+                                        <a href="{{ route('clientes.boleta.general') }}" class="ml-2 px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700">GENERAL</a>
 
                                     </td>
                                 </tr>
