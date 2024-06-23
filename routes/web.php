@@ -29,6 +29,8 @@ Route::middleware('auth')->group(function () {
     
     Route::get('prestamos/{prestamo}/abonos/create', [AbonoController::class, 'create'])->name('abonos.create');
     Route::post('prestamos/{prestamo}/abonos', [AbonoController::class, 'store'])->name('abonos.store');
+    Route::get('abonos/{abono}/pdf', [AbonoController::class, 'generarBoleta'])->name('abonos.pdf');
+
     
     Route::get('/clientes/{cliente}/boleta', [ClienteController::class, 'generarBoleta'])->name('clientes.boleta');
     Route::get('/clientes/{cliente}/boleta', [ClienteController::class, 'generarBoleta1'])->name('clientes.boleta');
@@ -37,6 +39,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/prestamos/buscar', [PrestamoController::class, 'buscar'])->name('prestamos.buscar');
 
     Route::get('/clientes/boleta/general', [ClienteController::class, 'generarBoletaGeneral'])->name('clientes.boleta.general');
+    
+
+
 
 });
 

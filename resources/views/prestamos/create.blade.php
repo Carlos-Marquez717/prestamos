@@ -69,17 +69,3 @@
     </div>
 @endsection
 
-@section('js')
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const form = document.getElementById('prestamo-form');
-            form.addEventListener('submit', function(event) {
-        
-
-                // Mostrar alerta después de enviar el formulario
-                window.alert('Préstamo creado exitosamente y boleta generada.');
-            });
-        });
-    </script>
-@endsection
-

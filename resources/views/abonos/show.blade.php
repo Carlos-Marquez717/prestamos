@@ -1,7 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-    <br><br><br>
     @if (session('success'))
         <div class="flex justify-center">
             <div class="bg-green-100 text-green-800 p-2 rounded mb-4 text-center">
@@ -27,6 +26,7 @@
                         <tr>
                             <th class="px-4 py-2">Fecha</th>
                             <th class="px-4 py-2">Monto</th>
+                            <th class="px-4 py-2">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -34,6 +34,9 @@
                             <tr>
                                 <td class="border px-4 py-2">{{ \Carbon\Carbon::parse($abono->fecha)->format('d-m-Y') }}</td>
                                 <td class="border px-4 py-2">{{ $abono->monto }}</td>
+                                <td class="border px-4 py-2">
+                                    <a href="{{ route('abonos.pdf', $abono->id) }}" class="text-indigo-600 hover:text-indigo-900">Descargar Boleta</a>
+                                </td>
                             </tr>
                         @endforeach
                     </tbody>
@@ -43,8 +46,8 @@
             <p class="mt-4 text-white"><strong>Saldo Restante:</strong> {{ $prestamo->cantidad_prestamo - $prestamo->abonos->sum('monto') }}</p>
 
             <div class="flex justify-center mt-4">
-                <a href="{{ route('prestamos.pdf', $prestamo->id) }}" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                    Descargar Boleta
+                <a href="{{ route('abonos.create', $prestamo) }}" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    Agregar Abono
                 </a>
             </div>
         </div>

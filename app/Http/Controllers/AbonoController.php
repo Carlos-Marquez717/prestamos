@@ -34,6 +34,15 @@ class AbonoController extends Controller
             'fecha' => $fechaFormateada, // Guardar la fecha formateada
         ]);
 
+        // Generar boleta después de crear el abono
+        $this->generarBoleta($abono);
+
+        // Redirigir a la vista show del préstamo
+        return redirect()->route('prestamos.show', $prestamo)->with('success', 'Abono creado exitosamente y boleta generada.');
+    }
+
+    public function generarBoleta(Abono $abono)
+    {
         // Cargar las relaciones necesarias
         $abono->load('prestamo.cliente');
 
@@ -42,46 +51,42 @@ class AbonoController extends Controller
             abort(404, 'El préstamo o el cliente asociado no fueron encontrados.');
         }
 
-        // Formatear la fecha del abono para mostrar en la boleta
-        $abono->fecha = Carbon::parse($abono->fecha)->format('d-m-Y');
-
-        // Generar el contenido HTML de la boleta
-        $html = view('pdf.boleta', compact('abono'))->render();
+        $cliente = $abono->prestamo->cliente;
+        $saldoRestante = $abono->prestamo->cantidad_prestamo - $abono->prestamo->abonos->sum('monto');
+        $filename = 'Boleta_Abono_' . $cliente->nombre . '_' . $abono->id . '.pdf';
 
         // Crear una nueva instancia de TCPDF
         $pdf = new TCPDF();
-
-        // Establecer el formato del documento
-        $pdf->setPrintHeader(false);
-        $pdf->setPrintFooter(false);
+        $pdf->SetCreator(PDF_CREATOR);
+        $pdf->SetAuthor('Tu Nombre');
+        $pdf->SetTitle('BOLETA DE ABONO');
+        $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+        $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
         $pdf->AddPage();
 
-        // Ajustar la posición del contenido HTML
-        $pdf->SetY(15);
-
-        // Añadir logo y título
+        // Añadir logo y título centrados
         $logo = public_path('images/Banco.svg');
-        $pdf->ImageSVG($logo, $x=15, $y=15, $w=30, $h=30);
+        $pdf->ImageSVG($logo, $x = 15, $y = 15, $w = 30, $h = 30);
         $pdf->SetXY(50, 15);
         $pdf->SetFont('helvetica', 'B', 20);
         $pdf->Cell(0, 15, '', 0, 1, 'C');
 
-        // Ajustar la posición del contenido HTML
-        $pdf->SetY(15);
+        // Generar el contenido HTML de la boleta
+        $html = '<h1 style="text-align:center; background-color: black; color: white;">' . $cliente->nombre . '</h1>';
+        $html .= '<p style="text-align:center; background-color: black; color: white;"><strong>MONTO ABONADO:</strong> ' . $abono->monto . '</p>';
+        $html .= '<p style="text-align:center; background-color: black; color: white;"><strong>FECHA DE ABONO:</strong> ' . Carbon::parse($abono->fecha)->format('d-m-Y') . '</p>';
+        $html .= '<p style="text-align:center; background-color: black; color: white;"><strong>SALDO RESTANTE:</strong> ' . $saldoRestante . '</p>';
+        $html .= '<p style="text-align:center; background-color: black; color: white;"><strong>FECHA DE COMPROBANTE:</strong> ' . now()->format('d-m-Y') . '</p>';
 
-        // Escribir el contenido HTML
+        // Escribir el contenido HTML en el PDF
         $pdf->writeHTML($html, true, false, true, false, '');
-
-        // Nombre del archivo PDF generado
-        $filename = 'boleta_' . $abono->id . '.pdf';
 
         // Guardar el PDF en el servidor
         $pdf->Output(public_path('pdf/' . $filename), 'F');
 
-        // Eliminar el archivo después de enviarlo como descarga
-        $response = response()->download(public_path('pdf/' . $filename))->deleteFileAfterSend(true);
-
-        // Devolver la respuesta de descarga
-        return $response;
+        // Puedes eliminar el archivo después de enviarlo como descarga si es necesario
+        // response()->download(public_path('pdf/' . $filename))->deleteFileAfterSend(true);
     }
 }
