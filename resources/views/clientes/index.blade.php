@@ -52,7 +52,7 @@
                                         <a href="{{ route('clientes.boleta.general') }}" class="ml-2 px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700">GENERAL</a>
 
                                     </td>
-                                </tr>
+                                </tr>6uy
                             @endforeach
                         </tbody>
                     </table>

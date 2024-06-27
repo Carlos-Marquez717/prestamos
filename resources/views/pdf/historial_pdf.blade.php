@@ -22,6 +22,7 @@
                 <td>{{ $prestamo->id }}</td>
                 <td>{{ $prestamo->cantidad_prestamo }}</td>
                 <td>{{ \Carbon\Carbon::parse($prestamo->fecha)->format('d/m/Y') }}</td>
+                
                 <td>
                     <ul>
                         @foreach ($prestamo->abonos as $abono)

@@ -28,17 +28,28 @@ class ClienteController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nombre' => 'required',
-            'direccion' => 'required',
-            'telefono' => 'required',
-            'email' => 'required|email', // Usa 'email'
+            'nombre' => 'required|string|max:255|unique:clientes,nombre',
+            'direccion' => 'required|string|max:255',
+            'telefono' => 'required|regex:/^\d{11}$/|unique:clientes,telefono',
+            'email' => 'required|email|unique:clientes,email',
+        ], [
+            'nombre.required' => 'El nombre es obligatorio.',
+            'nombre.unique' => 'El nombre ya está registrado.',
+            'direccion.required' => 'La dirección es obligatoria.',
+            'telefono.required' => 'El teléfono es obligatorio.',
+            'telefono.regex' => 'El teléfono debe tener 11 dígitos.',
+            'telefono.unique' => 'El teléfono ya está registrado.',
+            'email.required' => 'El correo electrónico es obligatorio.',
+            'email.email' => 'El correo electrónico no es válido.',
+            'email.unique' => 'El correo electrónico ya está registrado.',
         ]);
-
+    
         Cliente::create($request->all());
-
+    
         return redirect()->route('clientes.index')
             ->with('success', 'Cliente creado exitosamente.');
     }
+    
 
 
     public function showPrestamos(Request $request, Cliente $cliente)
@@ -132,14 +143,51 @@ class ClienteController extends Controller
         try {
             // Crea una instancia de tu clase PDF personalizada
             $pdf = new PDF();
-
-            // Lógica para generar la boleta específica del cliente
-            $html = '<h1>Boleta para Cliente: ' . $cliente->nombre . '</h1>';
-            // Añade más contenido según tu lógica específica para la boleta del cliente
-
+    
+            // Lógica para obtener los préstamos y abonos del cliente
+            $prestamos = $cliente->prestamos()->with('abonos')->get();
+    
+            // Genera el contenido HTML para la boleta
+            $html = '<h1>HISTORIAL DEL CLIENTE: ' . $cliente->nombre . '</h1>';
+    
+            foreach ($prestamos as $prestamo) {
+                // Calcular el saldo restante por pagar
+                $saldoRestante = $prestamo->cantidad_prestamo - $prestamo->abonos->sum('monto');
+                
+                // Determinar el estado del préstamo
+                $estadoPrestamo = ($saldoRestante <= 0) ? 'PAGADO' : 'EN PROCESO';
+    
+                
+                $html .= '<p style="text-align:center; background-color: black; color: white;">VENTA: ' . $prestamo->cantidad_prestamo . '</p>';
+                $html .= '<p style="text-align:center; background-color: black; color: white;">FECHA VENTA: ' . \Carbon\Carbon::parse($prestamo->fecha)->format('d-m-Y') . '</p>';
+                $html .= '<p style="text-align:center; background-color: white; color: black;">ESTADO: ' . $estadoPrestamo . '</p>';
+    
+                $html .= '<h3 style="text-align:center; background-color: black; color: white;">ABONOS:</h3>';
+                $html .= '<table border="1" cellpadding="5" cellspacing="0">';
+                $html .= '<thead>';
+                $html .= '<tr>';
+                $html .= '<th style="text-align:center; background-color: blue; color: white;">FECHA</th>';
+                $html .= '<th style="text-align:center; background-color: blue; color: white;">MONTO</th>';
+                $html .= '</tr>';
+                $html .= '</thead>';
+                $html .= '<tbody>';
+    
+                foreach ($prestamo->abonos as $abono) {
+                    $html .= '<tr>';
+                    $html .= '<td>' . \Carbon\Carbon::parse($abono->fecha)->format('d-m-Y') . '</td>';
+                    $html .= '<td>' . $abono->monto . '</td>';
+                    $html .= '</tr>';
+                }
+    
+                $html .= '</tbody>';
+                $html .= '</table>';
+                
+                $html .= '<p>Pendiente por Pagar: ' . $saldoRestante . '</p>';
+            }
+    
             // Agrega el contenido al PDF
             $pdf->addContent($html);
-
+    
             // Descarga el PDF al navegador con un nombre de archivo específico
             $pdf->download('boleta_' . $cliente->id . '.pdf');
         } catch (\Exception $e) {
@@ -147,9 +195,10 @@ class ClienteController extends Controller
             dd($e->getMessage()); // Por ejemplo, muestra el mensaje de error
         }
     }
+    
 
 
-    public function generarBoleta1(Cliente $cliente)
+        public function generarBoleta1(Cliente $cliente)
     {
         // Cargar el historial de préstamos del cliente con sus abonos
         $cliente->load('prestamos.abonos');
@@ -161,16 +210,17 @@ class ClienteController extends Controller
         $pdf = new TCPDF();
 
         // Establecer el formato del documento
-        
         $pdf->setPrintHeader(false);
         $pdf->setPrintFooter(false);
         $pdf->AddPage();
 
+        // Añadir el logo
         $logo = public_path('images/Banco.svg');
         $pdf->ImageSVG($logo, $x=15, $y=15, $w=30, $h=30);
         $pdf->SetXY(50, 15);
         $pdf->SetFont('helvetica', 'B', 12);
         $pdf->Cell(0, 15, '', 0, 1, 'C');
+
         // Escribir el contenido HTML
         $pdf->writeHTML($html, true, false, true, false, '');
 
@@ -181,6 +231,7 @@ class ClienteController extends Controller
         $pdf->Output(public_path('pdf/' . $filename), 'F');
         return response()->download(public_path('pdf/' . $filename))->deleteFileAfterSend(true);
     }
+
 
     public function generarBoletaGeneral()
     {

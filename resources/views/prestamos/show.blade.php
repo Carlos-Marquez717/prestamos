@@ -12,9 +12,9 @@
 
     <div class="container mx-auto px-4">
         <div class="max-w-md mx-auto bg-black p-4 rounded-lg shadow-md">
-            <h1 class="text-xl font-bold mb-4 text-center text-white">Detalles del Préstamo</h1>
+            <h1 class="text-xl font-bold mb-4 text-center text-white">DETALLES DEL PRÉSTAMO</h1>
 
-            <div class="text-white">
+            <div class=" text-white">
                 <p><strong>Cliente:</strong> {{ $prestamo->cliente->nombre }}</p>
                 <p><strong>Cantidad del Préstamo:</strong> {{ $prestamo->cantidad_prestamo }}</p>
                 <p><strong>Fecha del Préstamo:</strong> {{ \Carbon\Carbon::parse($prestamo->fecha)->format('d-m-Y') }}</p>
@@ -25,15 +25,15 @@
                 <table class="table-auto w-full bg-white text-black rounded-md shadow-md">
                     <thead>
                         <tr>
-                            <th class="px-4 py-2">Fecha</th>
-                            <th class="px-4 py-2">Monto</th>
+                            <th class="px-4 py-2 border border-white">Fecha</th>
+                            <th class="px-4 py-2 border border-white">Monto</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($prestamo->abonos as $abono)
                             <tr>
-                                <td class="border px-4 py-2">{{ \Carbon\Carbon::parse($abono->fecha)->format('d-m-Y') }}</td>
-                                <td class="border px-4 py-2">{{ $abono->monto }}</td>
+                                <td class="border px-4 py-2 border-white">{{ \Carbon\Carbon::parse($abono->fecha)->format('d-m-Y') }}</td>
+                                <td class="border px-4 py-2 border-white">{{ $abono->monto }}</td>
                             </tr>
                         @endforeach
                     </tbody>

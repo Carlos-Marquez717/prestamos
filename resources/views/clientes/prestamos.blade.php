@@ -1,5 +1,10 @@
 @extends('layouts.app')
 
+
+@section ('css')
+<link href="https://cdn.datatables.net/2.0.8/css/dataTables.tailwindcss.css" rel="stylesheet">
+
+@endsection
 @section('content')
     <div class="container mx-auto px-4 py-8">
         <div class="bg-black rounded-lg shadow-md px-6 py-4">
@@ -37,7 +42,7 @@
 
 
             <div class="overflow-x-auto">
-                <table class="min-w-full bg-black text-white">
+                <table  id="example" class="min-w-full bg-black text-white">
                     <thead>
                         <tr class="bg-gray-800">
                             <th class="py-2 px-4 border-b border-gray-600 text-center">ID</th>
@@ -87,6 +92,7 @@
                                         <button disabled class="px-4 py-2 bg-gray-400 text-white rounded-md cursor-not-allowed">Registrar Abono</button>
                                     @endif
                                     <a href="{{ route('prestamos.pdf', $prestamo) }}" class="ml-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">Descargar Boleta</a>
+                                    
                                 </td>
                             </tr>
                         @endforeach
@@ -104,3 +110,5 @@
         </div>
     </div>
 @endsection
+
+

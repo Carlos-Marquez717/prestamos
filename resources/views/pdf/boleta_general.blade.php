@@ -28,7 +28,7 @@
         <table>
             <thead>
                 <tr>
-                    <th style="text-align: center; background-color: black; color: white;">Prestamo ID</th>
+                    
                     <th style="text-align: center; background-color: black; color: white;">Fecha</th>
                     <th style="text-align: center; background-color: black; color: white;">Cantidad</th>
                     <th style="text-align: center; background-color: black; color: white;">Estado</th>
@@ -37,10 +37,10 @@
             <tbody>
                 @foreach ($cliente->prestamos as $prestamo)
                     <tr>
-                        <td>{{ $prestamo->id }}</td>
-                        <td>{{ \Carbon\Carbon::parse($prestamo->fecha)->format('d-m-Y') }}</td>
-                        <td>{{ $prestamo->cantidad_prestamo }}</td>
-                        <td>{{ $prestamo->cantidad_prestamo - $prestamo->abonos->sum('monto') == 0 ? 'Pagado' : 'Proceso' }}</td>
+                        
+                        <td style="text-align: center">{{ \Carbon\Carbon::parse($prestamo->fecha)->format('d-m-Y') }}</td>
+                        <td style="text-align: center">{{ $prestamo->cantidad_prestamo }}</td>
+                        <td style="text-align: center">{{ $prestamo->cantidad_prestamo - $prestamo->abonos->sum('monto') == 0 ? 'Pagado' : 'Proceso' }}</td>
                     </tr>
                 @endforeach
             </tbody>

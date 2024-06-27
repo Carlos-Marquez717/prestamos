@@ -8,6 +8,8 @@
     <style>
         body {
             font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
         }
 
         .header {
@@ -26,13 +28,14 @@
 
         th,
         td {
-            border: 1px solid #111111;
+            border: 1px solid #000;
             padding: 8px;
             text-align: left;
         }
 
         th {
-            background-color: #0a0a0a;
+            background-color: #000;
+            color: #fff;
         }
     </style>
 </head>
@@ -42,10 +45,9 @@
         <h1>HISTORIAL DEL CLIENTE: {{ $cliente->nombre }}</h1>
     </div>
     <div class="section">
-        <table style="margin-bottom: 20px">
+        <table>
             <tr>
-                <th colspan="2" style="text-align: center; background-color: black; color: white;">INFORMACION DEL
-                    CLIENTE</th>
+                <th colspan="2" style="text-align: center;">INFORMACIÓN DEL CLIENTE</th>
             </tr>
             <tr>
                 <td>Nombre:</td>
@@ -64,45 +66,43 @@
                 <td>{{ $cliente->email }}</td>
             </tr>
         </table>
+
         <h2 style="text-align: center">Historial de Préstamos</h2>
         @foreach ($cliente->prestamos as $prestamo)
-            <table style="margin-bottom: 20px">
+            <table>
                 <thead>
                     <tr>
-                        <th style="text-align: center; background-color: black; color: white;">Cantidad Prestada</th>
-                        <th style="text-align: center; background-color: black; color: white;">Fecha</th>
+                        <th style="text-align: center;">Cantidad Prestada</th>
+                        <th style="text-align: center;">Fecha</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
                         <td style="text-align: center">{{ $prestamo->cantidad_prestamo }}</td>
-                        <td style="text-align: center">{{ Carbon\Carbon::parse($prestamo->fecha)->format('d-m-Y') }}
-                        </td>
+                        <td style="text-align: center">{{ Carbon\Carbon::parse($prestamo->fecha)->format('d-m-Y') }}</td>
                     </tr>
                     <tr>
-                        <th colspan="2" style="text-align: center; background-color: black; color: white;">Abonos</th>
+                        <th colspan="2" style="text-align: center;">Abonos</th>
                     </tr>
                     <tr>
-                        <th style="text-align: center">Fecha</th>
-                        <th style="text-align: center">Monto</th>
+                        <th style="text-align: center;">Fecha</th>
+                        <th style="text-align: center;">Monto</th>
                     </tr>
                     @foreach ($prestamo->abonos as $abono)
                         <tr>
-                            <td>{{ Carbon\Carbon::parse($abono->fecha)->format('d-m-Y') }}</td>
-                            <td>{{ $abono->monto }}</td>
+                            <td style="text-align: center;">{{ Carbon\Carbon::parse($abono->fecha)->format('d-m-Y') }}</td>
+                            <td style="text-align: center;">{{ $abono->monto }}</td>
                         </tr>
                     @endforeach
                     <tr>
-                        <td colspan="1" style="text-align: center">PENDIENTE POR PAGAR:</td>
-                        <td colspan="1" style="text-align: center">
-                            {{ $prestamo->cantidad_prestamo - $prestamo->abonos()->sum('monto') }}</td>
+                        <td style="text-align: center;">PENDIENTE POR PAGAR:</td>
+                        <td style="text-align: center;">{{ $prestamo->cantidad_prestamo - $prestamo->abonos()->sum('monto') }}</td>
                     </tr>
                 </tbody>
             </table>
+            <br>
         @endforeach
-        <br><br>
     </div>
-
 </body>
 
 </html>
