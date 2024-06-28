@@ -51,6 +51,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/clientes/boleta/general', [ClienteController::class, 'generarBoletaGeneral'])->name('clientes.boleta.general');
     
 
+
 });
 
 require __DIR__.'/auth.php';

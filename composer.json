@@ -6,12 +6,15 @@
     "license": "MIT",
     "require": {
         "php": "^8.1",
+        "bacon/bacon-qr-code": "^2.0",
         "dompdf/dompdf": "^3.0",
+        "endroid/qr-code": "^5.0",
         "filament/filament": "^3.2",
         "guzzlehttp/guzzle": "^7.2",
         "laravel/framework": "^10.10",
         "laravel/sanctum": "^3.3",
         "laravel/tinker": "^2.8",
+        "simplesoftwareio/simple-qrcode": "^4.2",
         "spatie/laravel-pdf": "^1.5",
         "tecnickcom/tcpdf": "^6.7"
     },

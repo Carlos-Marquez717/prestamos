@@ -7,16 +7,35 @@ use App\Models\Cliente;
 use App\Services\PDF; // Importa la clase PDF desde el namespace correcto
 use Carbon\Carbon;
 use TCPDF;
+use Illuminate\Support\Facades\File;
+use BaconQrCode\Renderer\ImageRenderer;
+use BaconQrCode\Renderer\RendererStyle\RendererStyle;
+use BaconQrCode\Renderer\Image\ImagickImageBackEnd;
+use BaconQrCode\Writer;
+use Endroid\QrCode\QrCode as EndroidQrCode;
+use Endroid\QrCode\Writer\PngWriter;
 
 
 class ClienteController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        // Obtener todos los clientes junto con sus préstamos y abonos
-        $clientes = Cliente::with(['prestamos.abonos'])->get();
+        // Obtener el término de búsqueda
+        $search = $request->input('search');
 
-        $clientes = Cliente::paginate(5);
+        // Filtrar los clientes según el término de búsqueda
+        $clientesQuery = Cliente::query();
+
+        if ($search) {
+            $clientesQuery->where('nombre', 'like', "%{$search}%")
+                ->orWhere('direccion', 'like', "%{$search}%")
+                ->orWhere('telefono', 'like', "%{$search}%")
+                ->orWhere('email', 'like', "%{$search}%");
+        }
+
+        // Cargar los clientes junto con sus préstamos y abonos, y paginar los resultados
+        $clientes = $clientesQuery->with(['prestamos.abonos'])->paginate(5);
+
         return view('clientes.index', compact('clientes'));
     }
 
@@ -43,13 +62,13 @@ class ClienteController extends Controller
             'email.email' => 'El correo electrónico no es válido.',
             'email.unique' => 'El correo electrónico ya está registrado.',
         ]);
-    
+
         Cliente::create($request->all());
-    
+
         return redirect()->route('clientes.index')
             ->with('success', 'Cliente creado exitosamente.');
     }
-    
+
 
 
     public function showPrestamos(Request $request, Cliente $cliente)
@@ -141,27 +160,19 @@ class ClienteController extends Controller
     public function generarBoleta(Cliente $cliente)
     {
         try {
-            // Crea una instancia de tu clase PDF personalizada
-            $pdf = new PDF();
+            $pdf = new \App\Services\PDF();
     
-            // Lógica para obtener los préstamos y abonos del cliente
             $prestamos = $cliente->prestamos()->with('abonos')->get();
     
-            // Genera el contenido HTML para la boleta
             $html = '<h1>HISTORIAL DEL CLIENTE: ' . $cliente->nombre . '</h1>';
     
             foreach ($prestamos as $prestamo) {
-                // Calcular el saldo restante por pagar
                 $saldoRestante = $prestamo->cantidad_prestamo - $prestamo->abonos->sum('monto');
-                
-                // Determinar el estado del préstamo
                 $estadoPrestamo = ($saldoRestante <= 0) ? 'PAGADO' : 'EN PROCESO';
     
-                
                 $html .= '<p style="text-align:center; background-color: black; color: white;">VENTA: ' . $prestamo->cantidad_prestamo . '</p>';
                 $html .= '<p style="text-align:center; background-color: black; color: white;">FECHA VENTA: ' . \Carbon\Carbon::parse($prestamo->fecha)->format('d-m-Y') . '</p>';
                 $html .= '<p style="text-align:center; background-color: white; color: black;">ESTADO: ' . $estadoPrestamo . '</p>';
-    
                 $html .= '<h3 style="text-align:center; background-color: black; color: white;">ABONOS:</h3>';
                 $html .= '<table border="1" cellpadding="5" cellspacing="0">';
                 $html .= '<thead>';
@@ -174,31 +185,53 @@ class ClienteController extends Controller
     
                 foreach ($prestamo->abonos as $abono) {
                     $html .= '<tr>';
-                    $html .= '<td>' . \Carbon\Carbon::parse($abono->fecha)->format('d-m-Y') . '</td>';
-                    $html .= '<td>' . $abono->monto . '</td>';
+                    $html .= '<td style="text-align:center" >' . \Carbon\Carbon::parse($abono->fecha)->format('d-m-Y') . '</td>';
+                    $html .= '<td style="text-align:center">' . $abono->monto . '</td>';
                     $html .= '</tr>';
                 }
     
                 $html .= '</tbody>';
                 $html .= '</table>';
-                
                 $html .= '<p>Pendiente por Pagar: ' . $saldoRestante . '</p>';
             }
     
-            // Agrega el contenido al PDF
             $pdf->addContent($html);
     
-            // Descarga el PDF al navegador con un nombre de archivo específico
+            // Generar el código QR con SimpleSoftwareIO\QrCode y Endroid\QrCode
+            $qrCode = new EndroidQrCode('verifica el código QR');
+            $writer = new PngWriter();
+            $result = $writer->write($qrCode);
+    
+            // Guardar la imagen temporalmente
+            $qrImagePath = tempnam(sys_get_temp_dir(), 'qr_') . '.png';
+            $result->saveToFile($qrImagePath);
+    
+            // Calcular la posición Y para el QR y el texto
+            $currentY = $pdf->GetY();
+            $qrY = $currentY + 10;  // Ajusta este valor según la separación deseada
+    
+            // Agregar el código QR al PDF
+            $pdf->Image($qrImagePath, 90, $qrY, 30, 30, 'PNG');
+    
+            // Agregar el título del QR
+            $pdf->SetXY(15, $qrY + 30);  // Ajusta este valor según la posición deseada
+            $pdf->SetFont('helvetica', '', 12);
+            $pdf->Cell(180, 05, 'Verifica el código QR', 0, 1, 'C');
+    
+            // Eliminar la imagen temporal
+            unlink($qrImagePath);
+    
             $pdf->download('boleta_' . $cliente->id . '.pdf');
         } catch (\Exception $e) {
-            // Manejar cualquier excepción que pueda ocurrir
-            dd($e->getMessage()); // Por ejemplo, muestra el mensaje de error
+            dd($e->getMessage());
         }
     }
+        
+
     
 
 
-        public function generarBoleta1(Cliente $cliente)
+    public function generarBoleta1(Cliente $cliente)
     {
         // Cargar el historial de préstamos del cliente con sus abonos
         $cliente->load('prestamos.abonos');
@@ -216,7 +249,7 @@ class ClienteController extends Controller
 
         // Añadir el logo
         $logo = public_path('images/Banco.svg');
-        $pdf->ImageSVG($logo, $x=15, $y=15, $w=30, $h=30);
+        $pdf->ImageSVG($logo, $x = 15, $y = 15, $w = 30, $h = 30);
         $pdf->SetXY(50, 15);
         $pdf->SetFont('helvetica', 'B', 12);
         $pdf->Cell(0, 15, '', 0, 1, 'C');
@@ -235,45 +268,72 @@ class ClienteController extends Controller
 
     public function generarBoletaGeneral()
     {
-        // Fetch all clients with their loans and abonos
-        $clientes = Cliente::with(['prestamos.abonos'])->get();
+        try {
+            // Fetch all clients with their loans and abonos
+            $clientes = Cliente::with(['prestamos.abonos'])->get();
 
-        // Generate the content for the PDF
-        $html = view('pdf.boleta_general', compact('clientes'))->render();
+            // Generate the content for the PDF
+            $html = view('pdf.boleta_general', compact('clientes'))->render();
 
-        // Create a new TCPDF instance
-        $pdf = new TCPDF();
+            // Create a new TCPDF instance
+            $pdf = new TCPDF();
 
-        // Set document information
-        $pdf->SetCreator(PDF_CREATOR);
-        $pdf->SetAuthor('Your Company');
-        $pdf->SetTitle('Boleta General de Prestamos');
-        $pdf->SetSubject('Boleta General de Prestamos');
-        $pdf->SetKeywords('TCPDF, PDF, example, test, guide');
+            // Set document information
+            $pdf->SetCreator(PDF_CREATOR);
+            $pdf->SetAuthor('Your Company');
+            $pdf->SetTitle('Boleta General de Prestamos');
+            $pdf->SetSubject('Boleta General de Prestamos');
+            $pdf->SetKeywords('TCPDF, PDF, example, test, guide');
 
-        // Remove default header/footer
-        $pdf->setPrintHeader(false);
-        $pdf->setPrintFooter(false);
+            // Remove default header/footer
+            $pdf->setPrintHeader(false);
+            $pdf->setPrintFooter(false);
 
-        // Add a page
-        $pdf->AddPage();
+            // Add a page
+            $pdf->AddPage();
 
-        // Add the logo
-        $logo = public_path('images/Banco.svg');
-        $pdf->ImageSVG($logo, $x = 15, $y = 10, $w = 30, $h = 30);
+            // Add the logo
+            $logo = public_path('images/Banco.svg');
+            $pdf->ImageSVG($logo, $x = 15, $y = 10, $w = 30, $h = 30);
 
-        // Add some space below the logo
-        $pdf->SetY(45);
+            // Add some space below the logo
+            $pdf->SetY(25);
 
-        // Set content
-        $pdf->writeHTML($html, true, false, true, false, '');
+            // Set content
+            $pdf->writeHTML($html, true, false, true, false, '');
 
-        // Output PDF document
-        $filename = 'historial_general_prestamos.pdf';
-        $pdf->Output($filename, 'D'); // 'I' for inline display in browser, 'D' for download, 'F' for save on server, 'S' for returning as string
+            // Calcular la posición Y actual después del contenido
+            $currentY = $pdf->GetY();
+            $qrY = $currentY + 10;  // Ajusta este valor según la separación deseada
 
-        // Optional: Save the PDF on the server and return it as a download
-        // $pdf->Output(public_path('pdf/' . $filename), 'F');
-        // return response()->download(public_path('pdf/' . $filename))->deleteFileAfterSend(true);
+            // Generar el código QR con SimpleSoftwareIO\QrCode y Endroid\QrCode
+            $qrCode = new EndroidQrCode('verifica el código QR');
+            $writer = new PngWriter();
+            $result = $writer->write($qrCode);
+
+            // Guardar la imagen temporalmente
+            $qrImagePath = tempnam(sys_get_temp_dir(), 'qr_') . '.png';
+            $result->saveToFile($qrImagePath);
+
+            // Agregar el código QR al PDF
+            $pdf->Image($qrImagePath, 90, $qrY, 30, 30, 'PNG');
+
+            // Agregar el título del QR
+            $pdf->SetXY(90, $qrY + 32);  // Ajusta este valor según la posición deseada
+            $pdf->SetFont('helvetica', '', 12);
+            $pdf->Cell(30, 10, 'Verifica el código QR', 0, 1, 'C');
+
+            // Eliminar la imagen temporal
+            unlink($qrImagePath);
+
+            // Output PDF document
+            $filename = 'historial_general_prestamos.pdf';
+            $pdf->Output($filename, 'D'); // 'I' for inline display in browser, 'D' for download, 'F' for save on server, 'S' for returning as string
+
+        } catch (\Exception $e) {
+            dd($e->getMessage());
+        }
     }
+
+    
 }

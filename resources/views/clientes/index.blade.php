@@ -18,8 +18,11 @@
                 
                 <!-- Buscador -->
                 <div class="mb-4 flex justify-end">
-                    <input type="text" id="search" placeholder="Buscar por nombre, dirección, teléfono, correo electrónico" class="px-4 py-2 rounded-md w-full max-w-md bg-gray-800 text-white focus:outline-none focus:bg-gray-900">
+                    <form action="{{ route('clientes.index') }}" method="GET" class="w-full max-w-md">
+                        <input type="text" name="search" placeholder="Buscar por nombre, dirección, teléfono, correo electrónico" class="px-4 py-2 rounded-md w-full bg-gray-800 text-white focus:outline-none focus:bg-gray-900" value="{{ request('search') }}">
+                    </form>
                 </div>
+
                 
                 <div class="overflow-x-auto">
                     <table class="min-w-full bg-blue-900 text-white">

@@ -98,9 +98,14 @@
                         <td style="text-align: center;">PENDIENTE POR PAGAR:</td>
                         <td style="text-align: center;">{{ $prestamo->cantidad_prestamo - $prestamo->abonos()->sum('monto') }}</td>
                     </tr>
+
                 </tbody>
             </table>
             <br>
+            <div class="qr-code">
+                {!! $qrCode !!}
+            </div>
+            
         @endforeach
     </div>
 </body>

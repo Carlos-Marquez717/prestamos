@@ -61,7 +61,7 @@
                             <th style="background-color:black, text-black" class="no-export">ID</th>
                             <th class="no-export">Cliente</th>
                             <th class="no-export">Cantidad Préstamo</th>
-                            <th class="no-export">Fecha</th>
+                            <th class="no-export">Fecha y Hora</th>
                             <th class="no-export">Restante</th>
                             <th class="no-export">Estado</th>
                             <th>Acciones</th>
@@ -74,7 +74,7 @@
                                 <td>{{ $prestamo->id }}</td>
                                 <td>{{ $prestamo->cliente->nombre }}</td>
                                 <td>{{ $prestamo->cantidad_prestamo }}</td>
-                                <td>{{ \Carbon\Carbon::parse($prestamo->fecha)->format('d/m/Y') }}</td>
+                                <td>{{ \Carbon\Carbon::parse($prestamo->fecha)->format('d/m/Y H:i') }}</td>
                                 <td>{{ $prestamo->cantidad_prestamo - $prestamo->abonos()->sum('monto') }}</td>
                                 <td>
                                     @if ($prestamo->cantidad_prestamo - $prestamo->abonos()->sum('monto') == 0)

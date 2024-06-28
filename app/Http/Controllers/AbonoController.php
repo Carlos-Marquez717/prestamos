@@ -8,6 +8,8 @@ use App\Models\Prestamo;
 use App\Models\Abono;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Endroid\QrCode\QrCode as EndroidQrCode;
+use Endroid\QrCode\Writer\PngWriter;
 
 class AbonoController extends Controller
 {
@@ -41,52 +43,82 @@ class AbonoController extends Controller
         return redirect()->route('prestamos.show', $prestamo)->with('success', 'Abono creado exitosamente y boleta generada.');
     }
 
-    public function generarBoleta(Abono $abono)
+        public function generarBoleta(Abono $abono)
     {
-        // Cargar las relaciones necesarias
-        $abono->load('prestamo.cliente');
+        try {
+            // Cargar las relaciones necesarias
+            $abono->load('prestamo.cliente');
 
-        // Verificar que el cliente y el préstamo estén cargados correctamente
-        if (!$abono->prestamo || !$abono->prestamo->cliente) {
-            abort(404, 'El préstamo o el cliente asociado no fueron encontrados.');
+            // Verificar que el cliente y el préstamo estén cargados correctamente
+            if (!$abono->prestamo || !$abono->prestamo->cliente) {
+                abort(404, 'El préstamo o el cliente asociado no fueron encontrados.');
+            }
+
+            $cliente = $abono->prestamo->cliente;
+            $saldoRestante = $abono->prestamo->cantidad_prestamo - $abono->prestamo->abonos->sum('monto');
+            $filename = 'Boleta_Abono_' . $cliente->nombre . '_' . $abono->id . '.pdf';
+
+            // Crear una nueva instancia de TCPDF
+            $pdf = new TCPDF();
+            $pdf->SetCreator(PDF_CREATOR);
+            $pdf->SetAuthor('Tu Nombre');
+            $pdf->SetTitle('BOLETA DE ABONO');
+            $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+            $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+            $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+            $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+            $pdf->AddPage();
+
+            // Añadir logo y título centrados
+            $logo = public_path('images/Banco.svg');
+            $pdf->ImageSVG($logo, $x = 15, $y = 15, $w = 30, $h = 30);
+            $pdf->SetXY(50, 15);
+            $pdf->SetFont('helvetica', 'B', 20);
+            $pdf->Cell(0, 15, '', 0, 1, 'C');
+
+            // Generar el contenido HTML de la boleta
+            $html = '<h1 style="text-align:center; background-color: black; color: white;">' . $cliente->nombre . '</h1>';
+            $html .= '<p style="text-align:center; background-color: black; color: white;"><strong>MONTO ABONADO:</strong> ' . $abono->monto . '</p>';
+            $html .= '<p style="text-align:center; background-color: black; color: white;"><strong>FECHA DE ABONO:</strong> ' . Carbon::parse($abono->fecha)->format('d-m-Y') . '</p>';
+            $html .= '<p style="text-align:center; background-color: black; color: white;"><strong>SALDO RESTANTE:</strong> ' . $saldoRestante . '</p>';
+            $html .= '<p style="text-align:center; background-color: black; color: white;"><strong>FECHA DE COMPROBANTE:</strong> ' . now()->format('d-m-Y') . '</p>';
+
+            // Escribir el contenido HTML en el PDF
+            $pdf->writeHTML($html, true, false, true, false, '');
+
+            // Calcular la posición Y actual después del contenido
+            $currentY = $pdf->GetY();
+            $qrY = $currentY + 10;  // Ajusta este valor según la separación deseada
+
+            // Generar el código QR con SimpleSoftwareIO\QrCode y Endroid\QrCode
+            $qrCode = new EndroidQrCode('verifica el código QR');
+            $writer = new PngWriter();
+            $result = $writer->write($qrCode);
+
+            // Guardar la imagen temporalmente
+            $qrImagePath = tempnam(sys_get_temp_dir(), 'qr_') . '.png';
+            $result->saveToFile($qrImagePath);
+
+            // Agregar el código QR al PDF
+            $pdf->Image($qrImagePath, 90, $qrY, 30, 30, 'PNG');
+
+            // Agregar el título del QR
+            $pdf->SetXY(90, $qrY + 32);  // Ajusta este valor según la posición deseada
+            $pdf->SetFont('helvetica', '', 12);
+            $pdf->Cell(30, 10, 'Verifica el código QR', 0, 1, 'C');
+
+            // Eliminar la imagen temporal
+            unlink($qrImagePath);
+
+            // Output PDF document
+            $filename = 'Boleta_Abono_' . $cliente->nombre . '_' . $abono->id . '.pdf';
+            $pdf->Output(public_path('pdf/' . $filename), 'F'); // Guardar en el servidor
+
+            // Opcional: Devolver el archivo como una descarga
+            // return response()->download(public_path('pdf/' . $filename))->deleteFileAfterSend(true);
+        } catch (\Exception $e) {
+            dd($e->getMessage());
         }
-
-        $cliente = $abono->prestamo->cliente;
-        $saldoRestante = $abono->prestamo->cantidad_prestamo - $abono->prestamo->abonos->sum('monto');
-        $filename = 'Boleta_Abono_' . $cliente->nombre . '_' . $abono->id . '.pdf';
-
-        // Crear una nueva instancia de TCPDF
-        $pdf = new TCPDF();
-        $pdf->SetCreator(PDF_CREATOR);
-        $pdf->SetAuthor('Tu Nombre');
-        $pdf->SetTitle('BOLETA DE ABONO');
-        $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
-        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
-        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
-        $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
-        $pdf->AddPage();
-
-        // Añadir logo y título centrados
-        $logo = public_path('images/Banco.svg');
-        $pdf->ImageSVG($logo, $x = 15, $y = 15, $w = 30, $h = 30);
-        $pdf->SetXY(50, 15);
-        $pdf->SetFont('helvetica', 'B', 20);
-        $pdf->Cell(0, 15, '', 0, 1, 'C');
-
-        // Generar el contenido HTML de la boleta
-        $html = '<h1 style="text-align:center; background-color: black; color: white;">' . $cliente->nombre . '</h1>';
-        $html .= '<p style="text-align:center; background-color: black; color: white;"><strong>MONTO ABONADO:</strong> ' . $abono->monto . '</p>';
-        $html .= '<p style="text-align:center; background-color: black; color: white;"><strong>FECHA DE ABONO:</strong> ' . Carbon::parse($abono->fecha)->format('d-m-Y') . '</p>';
-        $html .= '<p style="text-align:center; background-color: black; color: white;"><strong>SALDO RESTANTE:</strong> ' . $saldoRestante . '</p>';
-        $html .= '<p style="text-align:center; background-color: black; color: white;"><strong>FECHA DE COMPROBANTE:</strong> ' . now()->format('d-m-Y') . '</p>';
-
-        // Escribir el contenido HTML en el PDF
-        $pdf->writeHTML($html, true, false, true, false, '');
-
-        // Guardar el PDF en el servidor
-        $pdf->Output(public_path('pdf/' . $filename), 'F');
-
-        // Puedes eliminar el archivo después de enviarlo como descarga si es necesario
-        // response()->download(public_path('pdf/' . $filename))->deleteFileAfterSend(true);
     }
+
 }
