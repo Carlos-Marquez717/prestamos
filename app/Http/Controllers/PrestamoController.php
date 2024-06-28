@@ -48,25 +48,25 @@ class PrestamoController extends Controller
             'cantidad_prestamo' => 'required|numeric|min:0',
             'fecha' => 'required|date',
         ]);
-    
+
         // Crear el préstamo
         $prestamo = Prestamo::create([
             'cliente_id' => $request->cliente_id,
             'cantidad_prestamo' => $request->cantidad_prestamo,
             'fecha' => $request->fecha,
         ]);
-    
+
         // Redirigir a la vista show del préstamo
         return redirect()->route('prestamos.show', $prestamo);
     }
-    
-        public function showBoleta(Prestamo $prestamo)
+
+    public function showBoleta(Prestamo $prestamo)
     {
         return view('prestamos.boleta', compact('prestamo'));
     }
 
 
-    
+
     public function generarBoleta(Prestamo $prestamo)
     {
         try {
@@ -140,7 +140,7 @@ class PrestamoController extends Controller
             $qrY = $currentY + 10;  // Ajusta este valor según la separación deseada
     
             // Generar el código QR con el identificador único (ID del préstamo)
-            $qrCode = new EndroidQrCode(route('boleta.show', $prestamo->id)); // Ejemplo de ruta que muestra la boleta
+            $qrCode = new EndroidQrCode(route('prestamos.show', $prestamo->id)); // Ruta de ejemplo para mostrar el préstamo
             $writer = new PngWriter();
             $result = $writer->write($qrCode);
     
@@ -159,14 +159,27 @@ class PrestamoController extends Controller
             // Eliminar la imagen temporal
             unlink($qrImagePath);
     
-            // Output PDF document
-            return $pdf->Output($filename, 'D');
+            // Generar el PDF como una respuesta HTTP para descargar
+            $response = Response::make($pdf->Output($filename, 'S'), 200, [
+                'Content-Type' => 'application/pdf',
+                'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+            ]);
+    
+            // Importante: Limpiar el buffer de salida para asegurar que no se mezcle con otros datos de salida
+            ob_clean();
+    
+            // Devolver la respuesta HTTP que contiene el PDF
+            return $response;
         } catch (\Exception $e) {
             dd($e->getMessage());
         }
     }
     
-    
+
+
+
+
+
 
     public function edit(Prestamo $prestamo)
     {
@@ -181,7 +194,7 @@ class PrestamoController extends Controller
     }
 
 
-    
+
     public function generarBoletaYDescargar(Prestamo $prestamo)
     {
         // Cargar las relaciones necesarias
@@ -257,9 +270,4 @@ class PrestamoController extends Controller
 
         return response()->json(['html' => $view]);
     }
-
-    
-
-   
-
 }

@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Endroid\QrCode\QrCode as EndroidQrCode;
 use Endroid\QrCode\Writer\PngWriter;
+use Illuminate\Support\Facades\Response;
 
 class AbonoController extends Controller
 {
@@ -43,7 +44,9 @@ class AbonoController extends Controller
         return redirect()->route('prestamos.show', $prestamo)->with('success', 'Abono creado exitosamente y boleta generada.');
     }
 
-        public function generarBoleta(Abono $abono)
+
+
+    public function generarBoleta(Abono $abono)
     {
         try {
             // Cargar las relaciones necesarias
@@ -110,15 +113,18 @@ class AbonoController extends Controller
             // Eliminar la imagen temporal
             unlink($qrImagePath);
 
-            // Output PDF document
-            $filename = 'Boleta_Abono_' . $cliente->nombre . '_' . $abono->id . '.pdf';
-            $pdf->Output(public_path('pdf/' . $filename), 'F'); // Guardar en el servidor
+            // Generar el PDF como una respuesta HTTP para descargar
+            $response = Response::make($pdf->Output($filename, 'S'), 200, [
+                'Content-Type' => 'application/pdf',
+                'Content-Disposition' => 'inline; filename="' . $filename . '"',
+            ]);
 
-            // Opcional: Devolver el archivo como una descarga
-            // return response()->download(public_path('pdf/' . $filename))->deleteFileAfterSend(true);
+            // Limpiar la salida del TCPDF
+            ob_end_clean();
+
+            return $response;
         } catch (\Exception $e) {
             dd($e->getMessage());
         }
     }
-
 }
