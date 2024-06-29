@@ -7,11 +7,6 @@ use App\Models\Cliente;
 use App\Services\PDF; // Importa la clase PDF desde el namespace correcto
 use Carbon\Carbon;
 use TCPDF;
-use Illuminate\Support\Facades\File;
-use BaconQrCode\Renderer\ImageRenderer;
-use BaconQrCode\Renderer\RendererStyle\RendererStyle;
-use BaconQrCode\Renderer\Image\ImagickImageBackEnd;
-use BaconQrCode\Writer;
 use Endroid\QrCode\QrCode as EndroidQrCode;
 use Endroid\QrCode\Writer\PngWriter;
 

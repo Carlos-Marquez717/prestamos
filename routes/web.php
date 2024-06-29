@@ -9,6 +9,26 @@ use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\PrestamoController;
 use App\Http\Controllers\AbonoController;
 use App\Http\Controllers\ReporteController;
+use App\Http\Controllers\Auth\PasswordResetLinkController;
+use App\Http\Controllers\Auth\NewPasswordController;
+
+
+// Password reset routes
+Route::get('/forgot-password', [PasswordResetLinkController::class, 'create'])
+    ->middleware('guest')
+    ->name('password.request');
+
+Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])
+    ->middleware('guest')
+    ->name('password.email');
+
+Route::get('/reset-password/{token}', [NewPasswordController::class, 'create'])
+    ->middleware('guest')
+    ->name('password.reset');
+
+Route::post('/reset-password', [NewPasswordController::class, 'store'])
+    ->middleware('guest')
+    ->name('password.update');
 
 Route::get('/', function () {
     return view('dashboard');
