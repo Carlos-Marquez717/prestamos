@@ -54,6 +54,7 @@ class PrestamoController extends Controller
             'cliente_id' => $request->cliente_id,
             'cantidad_prestamo' => $request->cantidad_prestamo,
             'fecha' => $request->fecha,
+            'monto' => $request->monto ?? 0, // Asignar un valor predeterminado si no se proporciona
         ]);
 
         // Redirigir a la vista show del préstamo

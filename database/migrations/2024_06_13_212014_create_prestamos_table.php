@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('cliente_id');
             $table->decimal('cantidad_prestamo', 10, 2);
+            $table->decimal('amount', 8, 2); // Asegúrate de que la columna 'amount' está aquí
             $table->date('fecha');
             $table->timestamps();
 

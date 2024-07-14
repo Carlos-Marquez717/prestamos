@@ -1,4 +1,6 @@
-<x-guest-layout>
+@extends('layouts.login-layout')
+
+@section('content')
     <div class="bg-black text-white py-8 px-4 sm:px-6 lg:px-8">
         <a href="/">
             <img src="{{ asset('images/Banco.png') }}" alt="Logo de la empresa">
@@ -56,5 +58,4 @@
             </div>
         </form>
     </div>    
-
-</x-guest-layout>
+@endsection

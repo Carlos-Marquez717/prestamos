@@ -10,15 +10,41 @@
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
 
+
         @yield('css')
 
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
-        
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <style>
+            html, body {
+                height: 100%;
+                margin: 0;
+            }
+    
+            body {
+                display: flex;
+                flex-direction: column;
+            }
+    
+            main {
+                flex: 1; /* Permite que el main tome el espacio restante */
+                display: flex;
+                flex-direction: column;
+            }
+    
+            footer {
+                background-color: black; /* Color del footer */
+                color: white;
+                padding: 1rem;
+                text-align: center;
+            }
+        </style>
+
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
-    <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
+    <body class="font-sans antialiased bg-gray-100 dark:bg-gray-900" style="background-image: url('{{ asset('images/criptomonedas.png') }}'); background-size: cover;">
+        <div class="min-h-screen dark:bg-gray-900 flex flex-col">
             @include('layouts.navigation')
 
             <!-- Page Heading -->
@@ -34,7 +60,17 @@
             <main>
                 @yield('content')
             </main>
+            <footer>
+                <p>&copy; {{ date('Y') }} PRESSTAPP. Todos los derechos reservados.</p>
+                <div>
+                    <a href="#" class="text-gray-400 hover:text-gray-300">Política de Privacidad</a>
+                    <a href="#" class="text-gray-400 hover:text-gray-300">Términos de Servicio</a>
+                    <a href="#" class="text-gray-400 hover:text-gray-300">Contacto</a>
+                </div>
+            </footer>
+            
         </div>
+        
     </body>
     
 

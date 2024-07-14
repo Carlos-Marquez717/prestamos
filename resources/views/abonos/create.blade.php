@@ -4,9 +4,10 @@
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 @endsection
 
-@extends('layouts.app')
+
 
 @section('content')
+    <br><br><br><br>
     <div class="container mx-auto px-4">
         <div class="max-w-md mx-auto bg-black p-4 rounded-lg shadow-md">
             <h1 class="text-xl font-bold mb-4 text-center text-white">Agregar Abono</h1>

@@ -1,8 +1,5 @@
 <?php
 
-
-
-
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ClienteController;
@@ -11,6 +8,10 @@ use App\Http\Controllers\AbonoController;
 use App\Http\Controllers\ReporteController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\NewPasswordController;
+use App\Http\Controllers\DashboardController;
+
+use App\Http\Controllers\ReportController;
+
 
 
 // Password reset routes
@@ -38,7 +39,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    
+    Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard')->middleware(['auth', 'verified']);
+
+    Route::get('/boleta/prestamos/{type}', [ReportController::class, 'generarBoletaPrestamos'])->name('boleta.prestamos');
+    Route::get('/boleta/abonos/{type}', [ReportController::class, 'generarBoletaAbonos'])->name('boleta.abonos');
+
 
     Route::get('/reporte', [ReporteController::class, 'generarReporte'])->name('reporte.generar');
     

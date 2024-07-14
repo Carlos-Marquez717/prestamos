@@ -11,6 +11,7 @@ class Prestamo extends Model
         'cliente_id',
         'cantidad_prestamo',
         'fecha',
+        'monto',
     ];
     
 
@@ -23,6 +24,8 @@ class Prestamo extends Model
     {
         return $this->hasMany(Abono::class);
     }
+
+
 }
 
 
