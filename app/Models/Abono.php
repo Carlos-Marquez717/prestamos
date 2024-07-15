@@ -24,4 +24,9 @@ class Abono extends Model
     {
         return $this->belongsTo(Prestamo::class);
     }
+    
+    public function cliente()
+    {
+        return $this->belongsTo(Cliente::class);
+    }
 }

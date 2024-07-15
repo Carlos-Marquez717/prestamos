@@ -47,9 +47,16 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/reporte-prestamos-dia', [PrestamoController::class, 'reportePrestamosPorDia'])->name('reporte.prestamos.dia');
 
+    Route::get('/generate-report/{type}', [App\Http\Controllers\ReportController::class, 'generateReport'])->name('reporte.generar');
 
     Route::get('/reporte', [ReporteController::class, 'generarReporte'])->name('reporte.generar');
-    
+    Route::get('/prestamos', [ReportController::class, 'index'])->name('reporte.prestamos');
+
+    // Ruta para generar la boleta de préstamos
+    Route::get('/reporte/prestamos/{type}', [ReportController::class, 'generarBoletaPrestamos'])->name('reporte.prestamos.generar');
+    Route::get('/reporte/prestamos/{type}', [ReportController::class, 'generarBoletaPrestamos'])->name('reporte.prestamos');
+
+
     Route::resource('clientes', ClienteController::class);
     Route::get('/clientes/{cliente}/prestamos', [ClienteController::class, 'showPrestamos'])->name('clientes.prestamos'); // Ruta correcta
 
