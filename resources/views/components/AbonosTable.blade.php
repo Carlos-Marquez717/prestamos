@@ -1,9 +1,7 @@
-<!-- resources/views/components/AbonosTable.blade.php -->
-
 <div class="custom-card mx-auto">
     <h2 class="text-center text-white">ABONOS</h2>
     <div class="table-responsive">
-        <table class="table table-sm table-dark text-center">
+        <table class="table table-sm table-dark text-center" style="width: 100%;">
             <thead class="thead-dark">
                 <tr>
                     <th scope="col">DIA</th>
@@ -15,11 +13,11 @@
             </thead>
             <tbody>
                 <tr>
-                    <td>{{ $abonosPorDia }}</td>
-                    <td>{{ $abonosPorSemana }}</td>
-                    <td>{{ $abonosPorMes }}</td>
-                    <td>{{ $abonosPorAnio }}</td>
-                    <td>{{ $totalAbonos }}</td>
+                    <td style="width: 20%;">{{ intval($abonosPorDia) }}</td>
+                    <td style="width: 20%;">{{ intval($abonosPorSemana) }}</td>
+                    <td style="width: 20%;">{{ intval($abonosPorMes) }}</td>
+                    <td style="width: 20%;">{{ intval($abonosPorAnio) }}</td>
+                    <td style="width: 20%;">{{ intval($totalAbonos) }}</td>
                 </tr>
             </tbody>
         </table>
