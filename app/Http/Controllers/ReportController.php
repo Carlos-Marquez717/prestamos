@@ -7,6 +7,8 @@ use App\Models\Prestamo;
 use App\Models\Abono;
 use TCPDF;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
+
 
 class ReportController extends Controller
 {
@@ -16,6 +18,9 @@ class ReportController extends Controller
             switch ($type) {
                 case 'dia':
                     $data = $this->getPrestamosPorDia();
+                    break;
+                case 'semana':
+                    $data = $this->getPrestamosPorSemana();
                     break;
                 case 'mes':
                     $data = $this->getPrestamosPorMes();
@@ -68,7 +73,6 @@ class ReportController extends Controller
                     $html .= '<tr>';
                     $html .= '<td style="text-align:center; background-color: black; color: white; border: 1px solid white;">' . $item['fecha'] . '</td>';
                     $html .= '<td style="text-align:center; background-color: black; color: white; border: 1px solid white;">$ ' . number_format($item['monto'], 2) . '</td>';
-                    $html .= '</tr>';
                 }
 
                 $html .= '</tbody>';
@@ -95,6 +99,9 @@ class ReportController extends Controller
             switch ($type) {
                 case 'dia':
                     $data = $this->getAbonosPorDia();
+                    break;
+                case 'semana':
+                    $data = $this->getAbonosPorSemana();
                     break;
                 case 'mes':
                     $data = $this->getAbonosPorMes();
@@ -166,6 +173,7 @@ class ReportController extends Controller
     }
 
 
+
     private function getTotalPrestamos()
     {
         return Prestamo::sum('monto');
@@ -178,9 +186,27 @@ class ReportController extends Controller
 
     private function getPrestamosPorDia()
     {
-        return Prestamo::selectRaw('DATE(created_at) as fecha, SUM(monto) as monto')
+        return Prestamo::selectRaw('DATE(created_at) as fecha, SUM(monto) as total_prestamos')
             ->whereDate('created_at', Carbon::today())
-            ->groupBy('fecha')
+            ->groupBy(DB::raw('DATE(created_at)'))
+            ->get()
+            ->toArray();
+    }
+
+    public function reportePrestamosPorDia()
+    {
+        $prestamosPorDia = $this->getPrestamosPorDia();
+        return view('reporte.prestamos', [
+            'prestamosPorDia' => $prestamosPorDia,
+        ]);
+    }
+    
+
+    private function getPrestamosPorSemana()
+    {
+        return Prestamo::selectRaw('WEEK(created_at) as semana, SUM(monto) as monto')
+            ->whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])
+            ->groupBy('semana')
             ->get()
             ->toArray();
     }
@@ -188,7 +214,7 @@ class ReportController extends Controller
     private function getPrestamosPorMes()
     {
         return Prestamo::selectRaw('MONTH(created_at) as mes, SUM(monto) as monto')
-            ->whereYear('created_at', Carbon::now()->year)
+            ->whereMonth('created_at', Carbon::now()->month)
             ->groupBy('mes')
             ->get()
             ->toArray();
@@ -197,6 +223,7 @@ class ReportController extends Controller
     private function getPrestamosPorAnio()
     {
         return Prestamo::selectRaw('YEAR(created_at) as anio, SUM(monto) as monto')
+            ->whereYear('created_at', Carbon::now()->year)
             ->groupBy('anio')
             ->get()
             ->toArray();
@@ -211,10 +238,19 @@ class ReportController extends Controller
             ->toArray();
     }
 
+    private function getAbonosPorSemana()
+    {
+        return Abono::selectRaw('WEEK(created_at) as semana, SUM(monto) as monto')
+            ->whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])
+            ->groupBy('semana')
+            ->get()
+            ->toArray();
+    }
+
     private function getAbonosPorMes()
     {
         return Abono::selectRaw('MONTH(created_at) as mes, SUM(monto) as monto')
-            ->whereYear('created_at', Carbon::now()->year)
+            ->whereMonth('created_at', Carbon::now()->month)
             ->groupBy('mes')
             ->get()
             ->toArray();
@@ -223,6 +259,7 @@ class ReportController extends Controller
     private function getAbonosPorAnio()
     {
         return Abono::selectRaw('YEAR(created_at) as anio, SUM(monto) as monto')
+            ->whereYear('created_at', Carbon::now()->year)
             ->groupBy('anio')
             ->get()
             ->toArray();

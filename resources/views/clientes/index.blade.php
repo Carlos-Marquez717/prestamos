@@ -35,7 +35,7 @@
                                 <th class="py-2 px-4 border-b border-gray-600">Acciones</th>
                             </tr>
                         </thead>
-                        <tbody id="table-body" class="bg-gray-800 divide-y divide-gray-700">
+                        <tbody id="table-body" class="bg-black divide-y divide-gray-700">
                             @foreach ($clientes as $cliente)
                                 <tr>
                                     <td class="py-2 px-4 border-b border-gray-600">{{ $cliente->nombre }}</td>

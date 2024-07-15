@@ -40,9 +40,12 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard')->middleware(['auth', 'verified']);
+    
 
-    Route::get('/boleta/prestamos/{type}', [ReportController::class, 'generarBoletaPrestamos'])->name('boleta.prestamos');
-    Route::get('/boleta/abonos/{type}', [ReportController::class, 'generarBoletaAbonos'])->name('boleta.abonos');
+    Route::get('/reporte/abonos/{type}', [ReportController::class, 'generarBoletaAbonos'])->name('reporte.abonos');
+    Route::get('/reporte/prestamos/{type}', [ReportController::class, 'generarBoletaPrestamos'])->name('reporte.prestamos');
+
+    Route::get('/reporte-prestamos-dia', [PrestamoController::class, 'reportePrestamosPorDia'])->name('reporte.prestamos.dia');
 
 
     Route::get('/reporte', [ReporteController::class, 'generarReporte'])->name('reporte.generar');

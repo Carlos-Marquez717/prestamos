@@ -10,7 +10,7 @@
     <br><br><br>
     <div class="container mx-auto px-4">
         <div class="max-w-md mx-auto bg-black p-4 rounded-lg shadow-md">
-            <h1 class="text-xl font-bold mb-4 text-center text-white">Agregar Préstamo</h1>
+            <h1 class="text-xl font-bold mb-4 text-center text-white"><span class="material-icons text-white">currency_exchange</span>Agregar Préstamo</h1>
 
             @if ($errors->any())
                 <div class="bg-red-100 text-red-800 p-2 rounded mb-4">

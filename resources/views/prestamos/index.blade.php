@@ -32,13 +32,13 @@
             color: white; /* Texto blanco */
         }
         table.dataTable tbody td {
-            background-color: rgb(26, 26, 27); /* Fondo negro */
+           
             color: white; /* Texto blanco */
         }
 
         /* Estilo para el card negro */
         .custom-card {
-            background-color: #1a1a1b; /* Negro */
+            background-color: #020202; /* Negro */
             color: white; /* Texto blanco */
             border-radius: 0.5rem; /* Bordes redondeados */
             margin-top: 20px; /* Espacio superior */
@@ -98,11 +98,11 @@
 <br><br>
     <div class="container">
         <div class="custom-card">
-            <h1 class="text-2xl font-bold mb-4 text-center">Listado de Préstamos</h1>
+            <h1 class="text-2xl font-bold mb-4 text-center"><span class="material-icons text-white">currency_exchange</span>Préstamos</h1>
 
             <!-- Tabla de préstamos -->
             <div class="table-responsive">
-                <table id="example" class="table table-striped" style="width:100%">
+                <table id="example" class="table  mx-auto table-black" style="width:100%">
                     <thead>
                         <tr>
                             <th>ID</th>
@@ -131,8 +131,7 @@
                                     @endif
                                 </td>
                                 <td data-label="Acciones">
-                                    <a href="{{ route('prestamos.edit', $prestamo->id) }}"
-                                        class="btn btn-sm btn-warning dt-button yellow"><span class="material-icons">edit</span></a>
+                                    
                                     <form action="{{ route('prestamos.destroy', $prestamo->id) }}" method="POST"
                                         class="d-inline">
                                         @csrf

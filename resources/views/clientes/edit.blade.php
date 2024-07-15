@@ -4,7 +4,7 @@
     <br> <br>
     <div class="container mx-auto px-4">
         <div class="max-w-md mx-auto bg-black p-4 rounded-lg shadow-md">
-            <h1 class="text-xl font-bold mb-4 text-center text-white">Editar Cliente</h1>
+            <h1 class="text-xl font-bold mb-4 text-center text-white"><span class="material-icons text-white">person_pin</span>Editar Cliente</h1>
 
             @if ($errors->any())
                 <div class="bg-red-100 text-red-800 p-2 rounded mb-4">
@@ -42,7 +42,9 @@
                 </div>
 
                 <div>
-                    <button type="submit" class="w-full bg-indigo-600 text-white py-2 px-4 rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Actualizar Cliente</button>
+                    <button type="submit" class="w-full bg-indigo-600 text-white py-2 px-4 rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"><span class="material-icons">
+                        sync_alt
+                        </span>Actualizar Cliente</button>
                 </div>
             </form>
         </div>
