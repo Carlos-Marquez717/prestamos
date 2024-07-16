@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('css')
-    <link href="https://cdn.datatables.net/2.0.8/css/dataTables.tailwindcss.css" rel="stylesheet">
+    
     <style>
         /* Estilos adicionales para DataTables responsivo */
         @media screen and (max-width: 640px) {

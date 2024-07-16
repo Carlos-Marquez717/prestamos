@@ -9,25 +9,28 @@
                     <div>
                         <h2 class="text-lg font-semibold mb-2 text-white">BIENVENIDO A PRESSTAPP</h2>
                         <p class="text-sm text-white mb-1">SR(A): {{ Auth::user()->name }}</p>
-                        <p class="text-sm text-white">Fecha y Hora: {{ now()->format('d/m/Y H:i') }}</p>
+                        @if (session()->has('last_login'))
+                            <p class="text-sm text-white">Última sesión: {{ session('last_login')->format('d/m/Y H:i') }}</p>
+                        @else
+                            <p class="text-sm text-white">Fecha y Hora: {{ now()->format('d/m/Y H:i') }}</p>
+                        @endif
                     </div>
                 </div>
+
             </div>
+        
             <div class="flex flex-col sm:flex-row justify-between">
                 <!-- Gráfica de Préstamos -->
                 <div class="bg-black p-6 rounded-lg shadow-md mb-6 w-full sm:w-1/2">
                     <h2 class="text-lg font-semibold mb-4 text-center text-white">PRESTAMOS</h2>
                     <canvas id="prestamosChart" height="300"></canvas>
-                    <div class="mt-4 flex justify-around">
-                    </div> <!-- Componente de Tabla de Préstamos -->
-                    @component('components.PrestamosTable', [
-                        'prestamosPorDia' => $prestamosPorDia,
-                        'prestamosPorSemana' => $prestamosPorSemana,
-                        'prestamosPorMes' => $prestamosPorMes,
-                        'prestamosPorAnio' => $prestamosPorAnio,
-                        'totalPrestamos' => $totalPrestamos,
-                    ])
-                    @endcomponent
+                    <div class="mt-4 flex justify-around"></div> 
+                    <!-- Componente de Tabla de Préstamos -->
+     
+
+
+
+
                 </div>
 
                 <!-- Gráfica de Abonos -->
@@ -37,15 +40,8 @@
                     <div class="mt-4 flex justify-around">
                     </div>
 
-                    <!-- Componente de Tabla de Abonos -->
-                    @component('components.AbonosTable', [
-                        'abonosPorDia' => $abonosPorDia,
-                        'abonosPorSemana' => $abonosPorSemana,
-                        'abonosPorMes' => $abonosPorMes,
-                        'abonosPorAnio' => $abonosPorAnio,
-                        'totalAbonos' => $totalAbonos,
-                    ])
-                    @endcomponent
+
+
                 </div>
 
             </div>

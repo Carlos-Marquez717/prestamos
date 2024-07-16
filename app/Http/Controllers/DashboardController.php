@@ -11,7 +11,7 @@ class DashboardController extends Controller
 {
     public function dashboard()
     {
-   
+
 
         return view('dashboard', [
             'prestamosPorDia' => $this->getPrestamosPorDia(),
@@ -76,5 +76,18 @@ class DashboardController extends Controller
     {
         return Abono::whereYear('created_at', Carbon::now()->year)->sum('monto');
     }
-    
+
+
+    public function showPrestamosTable()
+    {
+        $data = [
+            'prestamosPorDia' => $this->getPrestamosPorDia(),
+            'prestamosPorSemana' => $this->getPrestamosPorSemana(),
+            'prestamosPorMes' => $this->getPrestamosPorMes(),
+            'prestamosPorAnio' => $this->getPrestamosPorAnio(),
+            'totalPrestamos' => $this->getTotalPrestamos(),
+        ];
+
+        return view('components.PrestamosTable', $data);
+    }
 }
