@@ -2,6 +2,7 @@
 
 @section('content')
     <div class="py-12">
+
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="text-center mb-8">
                 <div class="bg-black p-4 rounded-lg shadow-md flex items-center justify-center">
@@ -18,38 +19,10 @@
                 </div>
 
             </div>
-        
-            <div class="flex flex-col sm:flex-row justify-between">
-                <!-- Gráfica de Préstamos -->
-                <div class="bg-black p-6 rounded-lg shadow-md mb-6 w-full sm:w-1/2">
-                    <h2 class="text-lg font-semibold mb-4 text-center text-white">PRESTAMOS</h2>
-                    <canvas id="prestamosChart" height="300"></canvas>
-                    <div class="mt-4 flex justify-around"></div> 
-                    <!-- Componente de Tabla de Préstamos -->
-     
 
-
-
-
-                </div>
-
-                <!-- Gráfica de Abonos -->
-                <div class="bg-black p-6 rounded-lg shadow-md mb-6 w-full sm:w-1/2 sm:ml-4">
-                    <h2 class="text-lg font-semibold mb-4 text-center text-white">ABONOS</h2>
-                    <canvas id="abonosChart" height="300"></canvas>
-                    <div class="mt-4 flex justify-around">
-                    </div>
-
-
-
-                </div>
-
+            <div class="flex flex-col sm:flex-row gap-6 justify-center">
+                <x-dashboard-tables />
             </div>
-
-
-
-
-
         </div>
     </div>
 
@@ -137,41 +110,4 @@
             });
         });
     </script>
-    <style>
-        /* Estilo para el card negro */
-        .custom-card {
-            background-color: #070707;
-            /* Negro */
-            color: white;
-            /* Texto blanco */
-            border-radius: 0.5rem;
-            /* Bordes redondeados */
-            margin-top: 20px;
-            /* Espacio superior */
-            padding: 20px;
-            /* Espaciado interno */
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-            /* Sombra */
-        }
-
-        .dt-button.red {
-            background-color: #DC3545;
-            /* Rojo */
-            color: white;
-        }
-
-        .table-dark {
-            background-color: #020202;
-            /* Fondo negro */
-            color: white;
-            /* Texto blanco */
-        }
-
-        .table-dark th,
-        .table-dark td {
-            border-color: white;
-            /* Color de borde blanco */
-        }
-    </style>
-    <!-- Tabla de Préstamos -->
 @endsection

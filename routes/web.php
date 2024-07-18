@@ -9,10 +9,7 @@ use App\Http\Controllers\ReporteController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\DashboardController;
-
 use App\Http\Controllers\ReportController;
-
-
 
 // Password reset routes
 Route::get('/forgot-password', [PasswordResetLinkController::class, 'create'])
@@ -40,29 +37,22 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard')->middleware(['auth', 'verified']);
-    
 
     Route::get('/reporte/abonos/{type}', [ReportController::class, 'generarBoletaAbonos'])->name('reporte.abonos');
     Route::get('/reporte/prestamos/{type}', [ReportController::class, 'generarBoletaPrestamos'])->name('reporte.prestamos');
 
     Route::get('/reporte-prestamos-dia', [PrestamoController::class, 'reportePrestamosPorDia'])->name('reporte.prestamos.dia');
-
-    Route::get('/generate-report/{type}', [App\Http\Controllers\ReportController::class, 'generateReport'])->name('reporte.generar');
+    Route::get('/generate-report/{type}', [ReportController::class, 'generateReport'])->name('reporte.generar');
 
     Route::get('/reporte', [ReporteController::class, 'generarReporte'])->name('reporte.generar');
-    Route::get('/prestamos', [ReportController::class, 'index'])->name('reporte.prestamos');
-
-    // Ruta para generar la boleta de préstamos
-    Route::get('/reporte/prestamos/{type}', [ReportController::class, 'generarBoletaPrestamos'])->name('reporte.prestamos.generar');
-    Route::get('/reporte/prestamos/{type}', [ReportController::class, 'generarBoletaPrestamos'])->name('reporte.prestamos');
-
+    Route::get('/prestamos', [PrestamoController::class, 'index'])->name('prestamos.index');
 
     Route::resource('clientes', ClienteController::class);
-    Route::get('/clientes/{cliente}/prestamos', [ClienteController::class, 'showPrestamos'])->name('clientes.prestamos'); // Ruta correcta
+    Route::get('/clientes/{cliente}/prestamos', [ClienteController::class, 'showPrestamos'])->name('clientes.prestamos');
 
     Route::resource('prestamos', PrestamoController::class)->except(['edit', 'destroy']);
     Route::get('prestamos/{prestamo}/pdf', [PrestamoController::class, 'generarBoleta'])->name('prestamos.pdf');
-    
+
     Route::get('prestamos/create', [PrestamoController::class, 'create'])->name('prestamos.create');
     Route::get('prestamos/{prestamo}/edit', [PrestamoController::class, 'edit'])->name('prestamos.edit');
     Route::delete('prestamos/{prestamo}', [PrestamoController::class, 'destroy'])->name('prestamos.destroy');
@@ -73,20 +63,9 @@ Route::middleware('auth')->group(function () {
     Route::get('prestamos/{prestamo}/abonos/create', [AbonoController::class, 'create'])->name('abonos.create');
     Route::post('prestamos/{prestamo}/abonos', [AbonoController::class, 'store'])->name('abonos.store');
     Route::get('abonos/{abono}/pdf', [AbonoController::class, 'generarBoleta'])->name('abonos.pdf');
-    Route::get('clientes/{cliente}/boleta', [ClienteController::class, 'generarBoleta1'])->name('clientes.boleta');
-
-    Route::get('/clientes/{cliente}/boleta', [ClienteController::class, 'generarBoleta'])->name('clientes.boleta');
-    // Elimina la segunda ruta duplicada para generar boleta
-    // Route::get('/clientes/{cliente}/boleta', [ClienteController::class, 'generarBoleta1'])->name('clientes.boleta');
-    Route::get('/prestamos/{prestamo}/reporte', 'PrestamoController@generarReporte')->name('prestamos.reporte');
-
-    Route::get('/prestamos/buscar', [PrestamoController::class, 'buscar'])->name('prestamos.buscar');
-    Route::get('prestamos/{prestamo}', [PrestamoController::class, 'show'])->name('prestamos.show');
-
+    Route::get('clientes/{cliente}/boleta', [ClienteController::class, 'generarBoleta'])->name('clientes.boleta');
     Route::get('/clientes/boleta/general', [ClienteController::class, 'generarBoletaGeneral'])->name('clientes.boleta.general');
-    
-
-
+    Route::get('/prestamos/prestamosPorDia', [PrestamoController::class, 'prestamosPorDia'])->name('prestamos.prestamosPorDia');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
