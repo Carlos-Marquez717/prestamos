@@ -16,7 +16,7 @@ class DashboardController extends Controller
         $prestamosPorSemana = $this->getPrestamosPorSemana(); // Asegúrate de que esto devuelva un array
         $prestamosPorMes = $this->getPrestamosPorMes(); // Asegúrate de que esto devuelva un array
         $prestamosPorAnio = $this->getPrestamosPorAnio(); // Asegúrate de que esto devuelva un array
-        
+
         $abonosPorDia = $this->getAbonosPorDia(); // Asegúrate de que esto devuelva un array
         $abonosPorSemana = $this->getAbonosPorSemana(); // Asegúrate de que esto devuelva un array
         $abonosPorMes = $this->getAbonosPorMes(); // Asegúrate de que esto devuelva un array
@@ -27,16 +27,16 @@ class DashboardController extends Controller
         $totalPrestamosPorSemana = is_array($prestamosPorSemana) ? array_sum($prestamosPorSemana) : $prestamosPorSemana;
         $totalPrestamosPorMes = is_array($prestamosPorMes) ? array_sum($prestamosPorMes) : $prestamosPorMes;
         $totalPrestamosPorAnio = is_array($prestamosPorAnio) ? array_sum($prestamosPorAnio) : $prestamosPorAnio;
-        
+
         $totalAbonosPorDia = is_array($abonosPorDia) ? array_sum($abonosPorDia) : $abonosPorDia;
         $totalAbonosPorSemana = is_array($abonosPorSemana) ? array_sum($abonosPorSemana) : $abonosPorSemana;
         $totalAbonosPorMes = is_array($abonosPorMes) ? array_sum($abonosPorMes) : $abonosPorMes;
         $totalAbonosPorAnio = is_array($abonosPorAnio) ? array_sum($abonosPorAnio) : $abonosPorAnio;
-        
+
         // Asegúrate de que `getTotalPrestamos()` y `getTotalAbonos()` devuelvan valores numéricos
         $totalPrestamos = $this->getTotalPrestamos(); // Debe devolver un valor numérico
         $totalAbonos = $this->getTotalAbonos(); // Debe devolver un valor numérico
-        
+
         // Pasa los datos a la vista
         return view('dashboard', [
             'prestamosPorDia' => $totalPrestamosPorDia,
@@ -52,7 +52,7 @@ class DashboardController extends Controller
         ]);
     }
 
-    
+
 
     public function index()
     {
@@ -61,13 +61,13 @@ class DashboardController extends Controller
         $prestamosPorMes = $this->getPrestamosPorMes();
         $prestamosPorAnio = $this->getPrestamosPorAnio();
         $totalPrestamos = $this->getTotalPrestamos();
-    
+
         $abonosPorDia = $this->getAbonosPorDia();
         $abonosPorSemana = $this->getAbonosPorSemana();
         $abonosPorMes = $this->getAbonosPorMes();
         $abonosPorAnio = $this->getAbonosPorAnio();
         $totalAbonos = $this->getTotalAbonos();
-    
+
         return view('dashboard')
             ->with('prestamosPorDia', $prestamosPorDia)
             ->with('prestamosPorSemana', $prestamosPorSemana)
@@ -80,8 +80,8 @@ class DashboardController extends Controller
             ->with('abonosPorAnio', $abonosPorAnio)
             ->with('totalAbonos', $totalAbonos);
     }
-    
-    
+
+
 
 
     private function getTotalPrestamos()
@@ -99,10 +99,16 @@ class DashboardController extends Controller
         return Prestamo::whereDate('created_at', Carbon::today())->sum('cantidad_prestamo');
     }
 
+    public function prestamosPorDia()
+    {
+        $prestamosPorDia = $this->getPrestamosPorDia();
+        return response()->json(['prestamosPorDia' => $prestamosPorDia]);
+    }
+    
+
     private function getPrestamosPorSemana()
     {
         return Prestamo::whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])->sum('cantidad_prestamo');
-
     }
 
     private function getPrestamosPorMes()
@@ -138,10 +144,10 @@ class DashboardController extends Controller
     private function calculateTotals($modelData, $period)
     {
         $totals = [];
-    
+
         foreach ($modelData as $data) {
             $date = Carbon::parse($data->created_at);
-            
+
             // Agrupa los datos según el período especificado
             switch ($period) {
                 case 'day':
@@ -160,18 +166,18 @@ class DashboardController extends Controller
                     $periodKey = $date->format('Y-m-d');
                     break;
             }
-    
+
             if (!isset($totals[$periodKey])) {
                 $totals[$periodKey] = 0;
             }
-    
+
             // Suma el monto del préstamo o abono al total correspondiente
             $totals[$periodKey] += $data->cantidad_prestamo ?? $data->monto;
         }
-    
+
         return $totals;
     }
-    
+
     public function showPrestamosTable()
     {
         $data = [
