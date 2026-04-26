@@ -12,6 +12,7 @@ class Prestamo extends Model
         'cliente_id',
         'cantidad_prestamo',
         'fecha',
+        'amount',
         'monto',
     ];
     

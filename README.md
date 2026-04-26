@@ -22,6 +22,24 @@ Sistema web en Laravel para gestion de clientes, prestamos, abonos, dashboard fi
 - Codigos QR en comprobantes para facilitar verificacion.
 - Interfaz construida con Blade, Tailwind CSS y componentes reutilizables.
 
+## Capturas Del Proyecto
+
+### Inicio de sesion
+
+![Inicio de sesion](docs/screenshots/login.png)
+
+### Dashboard financiero
+
+![Dashboard financiero](docs/screenshots/dashboard.png)
+
+### Listado de prestamos
+
+![Listado de prestamos](docs/screenshots/prestamos.png)
+
+### Detalle de prestamo
+
+![Detalle de prestamo](docs/screenshots/detalle-prestamo.png)
+
 ## Modulos
 
 ### Clientes
