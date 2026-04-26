@@ -64,7 +64,7 @@ class AbonoController extends Controller
             // Crear una nueva instancia de TCPDF
             $pdf = new TCPDF();
             $pdf->SetCreator(PDF_CREATOR);
-            $pdf->SetAuthor('Tu Nombre');
+            $pdf->SetAuthor('Sistema Prestamos');
             $pdf->SetTitle('BOLETA DE ABONO');
             $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
             $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
@@ -124,7 +124,8 @@ class AbonoController extends Controller
 
             return $response;
         } catch (\Exception $e) {
-            dd($e->getMessage());
+            report($e);
+            abort(500, 'No se pudo generar el documento.');
         }
     }
 

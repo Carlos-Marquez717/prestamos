@@ -1,66 +1,267 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Sistema de Prestamos
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Sistema web desarrollado con Laravel para administrar clientes, prestamos, abonos y reportes financieros. La aplicacion permite registrar clientes, crear prestamos, controlar pagos parciales, consultar saldos pendientes y generar comprobantes en PDF con codigos QR.
 
-## About Laravel
+Este proyecto fue creado como una solucion administrativa para centralizar el seguimiento de prestamos y pagos, reduciendo el uso de registros manuales y facilitando la consulta historica por cliente.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Descripcion Corta Para GitHub
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Sistema web en Laravel para gestion de clientes, prestamos, abonos, dashboard financiero y generacion de reportes PDF con codigos QR.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Caracteristicas Principales
 
-## Learning Laravel
+- Autenticacion de usuarios con Laravel Breeze.
+- Panel de control con resumen de prestamos y abonos.
+- Gestion CRUD de clientes.
+- Registro de prestamos asociados a clientes.
+- Registro de abonos con validacion del saldo disponible.
+- Busqueda y filtrado de informacion.
+- Historial de prestamos y abonos por cliente.
+- Generacion de comprobantes PDF individuales.
+- Reportes financieros por dia, semana, mes, anio y total acumulado.
+- Codigos QR en comprobantes para facilitar verificacion.
+- Interfaz construida con Blade, Tailwind CSS y componentes reutilizables.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Modulos
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+### Clientes
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Permite registrar, editar, listar, buscar y eliminar clientes. Cada cliente puede tener multiples prestamos asociados y un historial completo de movimientos.
 
-## Laravel Sponsors
+### Prestamos
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+Permite crear prestamos por cliente, consultar el detalle de cada prestamo, visualizar saldos y eliminar registros cuando corresponde.
 
-### Premium Partners
+### Abonos
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+Permite registrar pagos parciales sobre un prestamo. El sistema valida que el abono no exceda el saldo pendiente.
 
-## Contributing
+### Dashboard
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Presenta indicadores generales de la operacion, incluyendo montos prestados y abonados agrupados por periodos.
 
-## Code of Conduct
+### Reportes PDF
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Genera comprobantes y reportes descargables usando TCPDF. Incluye reportes por periodos y documentos asociados a clientes, prestamos y abonos.
 
-## Security Vulnerabilities
+## Tecnologias Utilizadas
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+- PHP 8.1+
+- Laravel 10
+- MySQL / MariaDB
+- Laravel Breeze
+- Laravel Sanctum
+- Blade
+- Tailwind CSS
+- Alpine.js
+- Vite
+- Chart.js
+- TCPDF
+- Endroid QR Code
+- Filament
 
-## License
+## Requisitos
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+- PHP 8.1 o superior
+- Composer
+- Node.js y npm
+- MySQL o MariaDB
+- Extensiones PHP recomendadas:
+  - `curl`
+  - `fileinfo`
+  - `gd`
+  - `intl`
+  - `mbstring`
+  - `openssl`
+  - `pdo_mysql`
+  - `zip`
+
+## Instalacion
+
+1. Clonar el repositorio:
+
+```bash
+git clone https://github.com/Carlos-Marquez717/prestamos.git
+cd prestamos
+```
+
+2. Instalar dependencias de PHP:
+
+```bash
+composer install
+```
+
+3. Instalar dependencias de frontend:
+
+```bash
+npm install
+```
+
+4. Crear el archivo de entorno:
+
+```bash
+cp .env.example .env
+```
+
+En Windows PowerShell tambien puedes usar:
+
+```powershell
+Copy-Item .env.example .env
+```
+
+5. Generar la clave de la aplicacion:
+
+```bash
+php artisan key:generate
+```
+
+6. Configurar la base de datos en `.env`:
+
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=prestamos
+DB_USERNAME=root
+DB_PASSWORD=
+```
+
+7. Ejecutar migraciones:
+
+```bash
+php artisan migrate
+```
+
+8. Iniciar el servidor de Laravel:
+
+```bash
+php artisan serve
+```
+
+9. En otra terminal, iniciar Vite:
+
+```bash
+npm run dev
+```
+
+La aplicacion quedara disponible normalmente en:
+
+```text
+http://127.0.0.1:8000
+```
+
+## Comandos Utiles
+
+Ejecutar pruebas:
+
+```bash
+php artisan test
+```
+
+Compilar assets para produccion:
+
+```bash
+npm run build
+```
+
+Limpiar cache de Laravel:
+
+```bash
+php artisan optimize:clear
+```
+
+Aplicar formato de codigo:
+
+```bash
+./vendor/bin/pint
+```
+
+En Windows:
+
+```powershell
+vendor\bin\pint
+```
+
+## Estructura Del Proyecto
+
+```text
+app/
+  Http/Controllers/   Controladores de clientes, prestamos, abonos y reportes
+  Models/             Modelos principales del dominio
+  Services/           Servicios auxiliares para generacion de documentos
+database/
+  migrations/         Definicion de tablas y relaciones
+  seeders/            Datos iniciales de la aplicacion
+resources/
+  views/              Vistas Blade de la interfaz
+  css/                Estilos principales
+  js/                 JavaScript de la aplicacion
+routes/
+  web.php             Rutas web protegidas por autenticacion
+public/
+  images/             Imagenes y recursos publicos
+```
+
+## Modelo De Datos Principal
+
+- Un cliente puede tener muchos prestamos.
+- Un prestamo pertenece a un cliente.
+- Un prestamo puede tener muchos abonos.
+- Cada abono pertenece a un prestamo.
+
+Esta estructura permite consultar el saldo pendiente de cada prestamo y el historial financiero completo de cada cliente.
+
+## Flujo Principal De Uso
+
+1. El usuario inicia sesion.
+2. Registra un cliente.
+3. Crea un prestamo asociado al cliente.
+4. Registra abonos sobre el prestamo.
+5. Consulta el estado del prestamo y saldo restante.
+6. Genera comprobantes o reportes en PDF.
+7. Revisa metricas generales desde el dashboard.
+
+## Variables De Entorno Importantes
+
+```env
+APP_NAME="Sistema Prestamos"
+APP_ENV=local
+APP_DEBUG=true
+APP_URL=http://127.0.0.1:8000
+
+DB_CONNECTION=mysql
+DB_DATABASE=prestamos
+DB_USERNAME=root
+DB_PASSWORD=
+```
+
+Para produccion se recomienda usar:
+
+```env
+APP_ENV=production
+APP_DEBUG=false
+```
+
+## Estado Del Proyecto
+
+Proyecto funcional orientado a portfolio, con modulos principales de gestion financiera, autenticacion, dashboard y reportes PDF. Antes de usarlo en produccion real se recomienda reforzar permisos, roles de usuario, validaciones especificas del negocio, respaldos de base de datos y despliegue seguro.
+
+## Aprendizajes Demostrados
+
+- Arquitectura MVC con Laravel.
+- Relaciones Eloquent entre modelos.
+- Validacion de formularios.
+- Rutas protegidas por autenticacion.
+- Generacion de documentos PDF.
+- Integracion de codigos QR.
+- Uso de migraciones para versionar base de datos.
+- Construccion de interfaz con Blade y Tailwind CSS.
+- Uso de Vite para compilar assets frontend.
+
+## Autor
+
+Desarrollado como proyecto de portfolio para demostrar habilidades en desarrollo web con Laravel, PHP, MySQL y herramientas modernas de frontend.
+
+## Licencia
+
+Este proyecto esta disponible como muestra de portfolio. Puedes adaptar la licencia segun el uso que quieras darle al repositorio.

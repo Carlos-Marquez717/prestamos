@@ -12,7 +12,7 @@ class PdfGenerator
     {
         $this->pdf = new TCPDF();
         $this->pdf->SetCreator(PDF_CREATOR);
-        $this->pdf->SetAuthor('Your Name');
+        $this->pdf->SetAuthor('Sistema Prestamos');
         $this->pdf->SetTitle('Sample PDF');
         $this->pdf->setPrintHeader(false);
         $this->pdf->setPrintFooter(false);

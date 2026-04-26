@@ -88,7 +88,7 @@ class PrestamoController extends Controller
             // Crear una nueva instancia de TCPDF
             $pdf = new TCPDF();
             $pdf->SetCreator(PDF_CREATOR);
-            $pdf->SetAuthor('Tu Nombre');
+            $pdf->SetAuthor('Sistema Prestamos');
             $pdf->SetTitle('BOLETA');
             $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
             $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
@@ -174,7 +174,8 @@ class PrestamoController extends Controller
             // Devolver la respuesta HTTP que contiene el PDF
             return $response;
         } catch (\Exception $e) {
-            dd($e->getMessage());
+            report($e);
+            abort(500, 'No se pudo generar el documento.');
         }
     }
 
@@ -215,7 +216,7 @@ class PrestamoController extends Controller
         // Crear una nueva instancia de TCPDF
         $pdf = new TCPDF();
         $pdf->SetCreator(PDF_CREATOR);
-        $pdf->SetAuthor('Tu Nombre');
+        $pdf->SetAuthor('Sistema Prestamos');
         $pdf->SetTitle('BOLETA');
         $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
         $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
@@ -294,7 +295,7 @@ class PrestamoController extends Controller
             // Crear una nueva instancia de TCPDF
             $pdf = new TCPDF();
             $pdf->SetCreator(PDF_CREATOR);
-            $pdf->SetAuthor('Tu Nombre');
+            $pdf->SetAuthor('Sistema Prestamos');
             $pdf->SetTitle('BOLETA DEL DÍA');
             $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
             $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
@@ -355,7 +356,8 @@ class PrestamoController extends Controller
             // Devolver la respuesta HTTP que contiene el PDF
             return $response;
         } catch (\Exception $e) {
-            dd($e->getMessage());
+            report($e);
+            abort(500, 'No se pudo generar el documento.');
         }
     }
 
@@ -374,7 +376,7 @@ class PrestamoController extends Controller
             // Crear una nueva instancia de TCPDF
             $pdf = new TCPDF();
             $pdf->SetCreator(PDF_CREATOR);
-            $pdf->SetAuthor('Tu Nombre');
+            $pdf->SetAuthor('Sistema Prestamos');
             $pdf->SetTitle('BOLETA DEL MES');
             $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
             $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
@@ -442,7 +444,8 @@ class PrestamoController extends Controller
             // Devolver la respuesta HTTP que contiene el PDF
             return $response;
         } catch (\Exception $e) {
-            dd($e->getMessage());
+            report($e);
+            abort(500, 'No se pudo generar el documento.');
         }
     }
 
@@ -462,7 +465,7 @@ class PrestamoController extends Controller
             // Crear una nueva instancia de TCPDF
             $pdf = new TCPDF();
             $pdf->SetCreator(PDF_CREATOR);
-            $pdf->SetAuthor('Tu Nombre');
+            $pdf->SetAuthor('Sistema Prestamos');
             $pdf->SetTitle('BOLETA DE LA SEMANA');
             $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
             $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
@@ -530,7 +533,8 @@ class PrestamoController extends Controller
             // Devolver la respuesta HTTP que contiene el PDF
             return $response;
         } catch (\Exception $e) {
-            dd($e->getMessage());
+            report($e);
+            abort(500, 'No se pudo generar el documento.');
         }
     }
 
@@ -550,7 +554,7 @@ class PrestamoController extends Controller
             // Crear una nueva instancia de TCPDF
             $pdf = new TCPDF();
             $pdf->SetCreator(PDF_CREATOR);
-            $pdf->SetAuthor('Tu Nombre');
+            $pdf->SetAuthor('Sistema Prestamos');
             $pdf->SetTitle('BOLETA DEL AÑO');
             $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
             $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
@@ -631,7 +635,8 @@ class PrestamoController extends Controller
             // Devolver la respuesta HTTP que contiene el PDF
             return $response;
         } catch (\Exception $e) {
-            dd($e->getMessage());
+            report($e);
+            abort(500, 'No se pudo generar el documento.');
         }
     }
 
@@ -650,7 +655,7 @@ class PrestamoController extends Controller
             // Crear una nueva instancia de TCPDF
             $pdf = new TCPDF();
             $pdf->SetCreator(PDF_CREATOR);
-            $pdf->SetAuthor('Tu Nombre');
+            $pdf->SetAuthor('Sistema Prestamos');
             $pdf->SetTitle('BOLETA TOTAL DE PRÉSTAMOS');
             $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
             $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
@@ -692,7 +697,8 @@ class PrestamoController extends Controller
             // Devolver la respuesta HTTP que contiene el PDF
             return $response;
         } catch (\Exception $e) {
-            dd($e->getMessage());
+            report($e);
+            abort(500, 'No se pudo generar el documento.');
         }
     }
 
@@ -708,7 +714,7 @@ class PrestamoController extends Controller
             // Crear una nueva instancia de TCPDF
             $pdf = new TCPDF();
             $pdf->SetCreator(PDF_CREATOR);
-            $pdf->SetAuthor('Tu Nombre');
+            $pdf->SetAuthor('Sistema Prestamos');
             $pdf->SetTitle('BOLETA DE ABONOS DEL DÍA');
             $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
             $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
@@ -787,7 +793,8 @@ class PrestamoController extends Controller
             // Devolver la respuesta HTTP que contiene el PDF
             return $response;
         } catch (\Exception $e) {
-            dd($e->getMessage());
+            report($e);
+            abort(500, 'No se pudo generar el documento.');
         }
     }
 
@@ -804,7 +811,7 @@ class PrestamoController extends Controller
             // Crear una nueva instancia de TCPDF
             $pdf = new TCPDF();
             $pdf->SetCreator(PDF_CREATOR);
-            $pdf->SetAuthor('Tu Nombre');
+            $pdf->SetAuthor('Sistema Prestamos');
             $pdf->SetTitle('BOLETA DE ABONOS DE LA SEMANA');
             $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
             $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
@@ -883,7 +890,8 @@ class PrestamoController extends Controller
             // Devolver la respuesta HTTP que contiene el PDF
             return $response;
         } catch (\Exception $e) {
-            dd($e->getMessage());
+            report($e);
+            abort(500, 'No se pudo generar el documento.');
         }
     }
 
@@ -901,7 +909,7 @@ class PrestamoController extends Controller
             // Crear una nueva instancia de TCPDF
             $pdf = new TCPDF();
             $pdf->SetCreator(PDF_CREATOR);
-            $pdf->SetAuthor('Tu Nombre');
+            $pdf->SetAuthor('Sistema Prestamos');
             $pdf->SetTitle('BOLETA DE ABONOS DEL MES');
             $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
             $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
@@ -980,7 +988,8 @@ class PrestamoController extends Controller
             // Devolver la respuesta HTTP que contiene el PDF
             return $response;
         } catch (\Exception $e) {
-            dd($e->getMessage());
+            report($e);
+            abort(500, 'No se pudo generar el documento.');
         }
     }
 
@@ -996,7 +1005,7 @@ class PrestamoController extends Controller
             // Crear una nueva instancia de TCPDF
             $pdf = new TCPDF();
             $pdf->SetCreator(PDF_CREATOR);
-            $pdf->SetAuthor('Tu Nombre');
+            $pdf->SetAuthor('Sistema Prestamos');
             $pdf->SetTitle('BOLETA DE ABONOS DEL AÑO');
             $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
             $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
@@ -1090,7 +1099,8 @@ class PrestamoController extends Controller
             // Devolver la respuesta HTTP que contiene el PDF
             return $response;
         } catch (\Exception $e) {
-            dd($e->getMessage());
+            report($e);
+            abort(500, 'No se pudo generar el documento.');
         }
     }
 
@@ -1104,7 +1114,7 @@ class PrestamoController extends Controller
             // Crear una nueva instancia de TCPDF
             $pdf = new TCPDF();
             $pdf->SetCreator(PDF_CREATOR);
-            $pdf->SetAuthor('Tu Nombre');
+            $pdf->SetAuthor('Sistema Prestamos');
             $pdf->SetTitle('BOLETA DE TOTAL ABONADO');
             $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
             $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
@@ -1151,7 +1161,8 @@ class PrestamoController extends Controller
             // Devolver la respuesta HTTP que contiene el PDF
             return $response;
         } catch (\Exception $e) {
-            dd($e->getMessage());
+            report($e);
+            abort(500, 'No se pudo generar el documento.');
         }
     }
 }

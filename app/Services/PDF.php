@@ -11,7 +11,7 @@ class PDF extends TCPDF
     public function __construct()
     {
         parent::__construct();
-        $this->SetCreator('Your Name');
+        $this->SetCreator('Sistema Prestamos');
         $this->SetTitle('HISTORIAL_CLIENTE');
         $this->SetMargins(15, 15, 15);
     }

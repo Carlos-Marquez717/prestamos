@@ -218,7 +218,8 @@ class ClienteController extends Controller
     
             $pdf->download('boleta_' . $cliente->id . '.pdf');
         } catch (\Exception $e) {
-            dd($e->getMessage());
+            report($e);
+            abort(500, 'No se pudo generar el documento.');
         }
     }
         
@@ -275,7 +276,7 @@ class ClienteController extends Controller
 
             // Set document information
             $pdf->SetCreator(PDF_CREATOR);
-            $pdf->SetAuthor('Your Company');
+            $pdf->SetAuthor('Sistema Prestamos');
             $pdf->SetTitle('Boleta General de Prestamos');
             $pdf->SetSubject('Boleta General de Prestamos');
             $pdf->SetKeywords('TCPDF, PDF, example, test, guide');
@@ -326,7 +327,8 @@ class ClienteController extends Controller
             $pdf->Output($filename, 'D'); // 'I' for inline display in browser, 'D' for download, 'F' for save on server, 'S' for returning as string
 
         } catch (\Exception $e) {
-            dd($e->getMessage());
+            report($e);
+            abort(500, 'No se pudo generar el documento.');
         }
     }
 

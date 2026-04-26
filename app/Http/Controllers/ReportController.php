@@ -74,7 +74,7 @@ class ReportController extends Controller
 
         $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
         $pdf->SetCreator(PDF_CREATOR);
-        $pdf->SetAuthor('Your Name');
+        $pdf->SetAuthor('Sistema Prestamos');
         $pdf->SetTitle('Reporte de Préstamos y Abonos');
         $pdf->SetSubject('Reporte de Préstamos y Abonos');
         $pdf->SetKeywords('TCPDF, PDF, reporte, préstamos, abonos');

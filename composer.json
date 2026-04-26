@@ -1,8 +1,8 @@
 {
-    "name": "laravel/laravel",
+    "name": "joaquin-ureta/sistema-prestamos",
     "type": "project",
-    "description": "The skeleton application for the Laravel framework.",
-    "keywords": ["laravel", "framework"],
+    "description": "Sistema web para gestionar clientes, prestamos, abonos y reportes en PDF.",
+    "keywords": ["laravel", "prestamos", "clientes", "abonos", "pdf", "portfolio"],
     "license": "MIT",
     "require": {
         "php": "^8.1",
